@@ -191,7 +191,7 @@ function Sidenav({ color }) {
             >
               {tables}
             </span>
-            <span className="label">Tables</span>
+            <span className="label">Platforms</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="3">
@@ -204,52 +204,64 @@ function Sidenav({ color }) {
             >
               {billing}
             </span>
-            <span className="label">Billing</span>
+            <span className="label">Tasks</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="4">
-          <NavLink to="/rtl">
+          <NavLink to="/support">
             <span
               className="icon"
               style={{
-                background: page === "rtl" ? color : "",
+                background: page === "support" ? color : "",
               }}
             >
               {rtl}
             </span>
-            <span className="label">RTL</span>
+            <span className="label">Support</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item className="menu-item-header" key="5">
-          Account Pages
-        </Menu.Item>
-        <Menu.Item key="6">
-          <NavLink to="/profile">
+        <Menu.Item key="4">
+          <NavLink to="/learnings">
             <span
               className="icon"
               style={{
-                background: page === "profile" ? color : "",
+                background: page === "support" ? color : "",
               }}
             >
-              {profile}
+              {rtl}
             </span>
-            <span className="label">Profile</span>
+            <span className="label">Learnings</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="7">
+        <Menu.Item key="4">
+          <NavLink to="/ordawlt">
+            <span
+              className="icon"
+              style={{
+                background: page === "ordawlt" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Order and Wallet</span>
+          </NavLink>
+        </Menu.Item>
+      
+      
+        {/* <Menu.Item key="7">
           <NavLink to="/sign-in">
             <span className="icon">{signin}</span>
             <span className="label">Sign In</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="8">
+          </NavLink> */}
+        {/* </Menu.Item> */}
+        {/* <Menu.Item key="8">
           <NavLink to="/sign-up">
             <span className="icon">{signup}</span>
             <span className="label">Sign Up</span>
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
-      <div className="aside-footer">
+      {/* <div className="aside-footer">
         <div
           className="footer-box"
           style={{
@@ -265,7 +277,7 @@ function Sidenav({ color }) {
             DOCUMENTATION
           </Button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

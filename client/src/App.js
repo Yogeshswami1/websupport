@@ -21,7 +21,9 @@ import Main from "./components/layout/Main";
 import "antd/dist/antd.css";
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
-
+import Support from "./pages/Support";
+import Learnings from "./pages/Learnings";
+import Ordawlt from "./pages/Ordawlt";
 function App() {
   return (
     <div className="App">
@@ -32,8 +34,12 @@ function App() {
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/tables" component={Tables} />
           <Route exact path="/billing" component={Billing} />
-          <Route exact path="/rtl" component={Rtl} />
+          <Route exact path="/support" component={Support} />
           <Route exact path="/profile" component={Profile} />
+          <Route exact path="/learnings" component={Learnings} />
+          <Route exact path="/ordawlt" component={Ordawlt} />
+
+
           <Redirect from="*" to="/dashboard" />
         </Main>
       </Switch>
