@@ -1,16 +1,4 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
-// import { useState } from "react";
 import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
@@ -164,9 +152,9 @@ function Sidenav({ color }) {
     <>
       <div className="brand">
         <img src={logo} alt="" />
-        <span>Muse Dashboard</span>
+        <span>Admin Dashboard</span>
       </div>
-      <hr />
+
       <Menu theme="light" mode="inline">
         <Menu.Item key="1">
           <NavLink to="/dashboard">
@@ -181,6 +169,84 @@ function Sidenav({ color }) {
             <span className="label">Dashboard</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="1">
+          <NavLink to="/services">
+            <span
+              className="icon"
+              style={{
+                background: page === "dashboard" ? color : "",
+              }}
+            >
+              {dashboard}
+            </span>
+            <span className="label">Services</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <NavLink to="/contact">
+            <span
+              className="icon"
+              style={{
+                background: page === "dashboard" ? color : "",
+              }}
+            >
+              {dashboard}
+            </span>
+            <span className="label">Contact</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="7">
+          <NavLink to="/managertab">
+            <span
+              className="icon"
+              style={{
+                background: page === "tables" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">Manager Tab</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="8">
+          <NavLink to="/usertab">
+            <span
+              className="icon"
+              style={{
+                background: page === "tables" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">User Tab</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="4">
+          <a href="https://hindi.liyostech.com/" target="_blank">
+            <span
+              className="icon"
+              style={{
+                background: page === "ordawlt" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">LMS</span>
+          </a>
+        </Menu.Item>
+        <Menu.Item key="4">
+          <a href="https://support.saumiccraft.com/" target="_blank">
+            <span
+              className="icon"
+              style={{
+                background: page === "support" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Support</span>
+          </a>
+        </Menu.Item>
         <Menu.Item key="2">
           <NavLink to="/tables">
             <span
@@ -194,6 +260,37 @@ function Sidenav({ color }) {
             <span className="label">Platforms</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="9">
+          <NavLink to="/userdashboard">
+            <span
+              className="icon"
+              style={{
+                background: page === "tables" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">User Dashboard</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="9">
+          <NavLink to="/support">
+            <span
+              className="icon"
+              style={{
+                background: page === "tables" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">Support</span>
+          </NavLink>
+        </Menu.Item>
+        <hr />
+        {/* <div className="brand">
+        <img src={logo} alt="" />
+        <span>Manager Dashboard</span>
+      </div>
         <Menu.Item key="3">
           <NavLink to="/billing">
             <span
@@ -220,7 +317,7 @@ function Sidenav({ color }) {
             <span className="label">Support</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="4">
+        <Menu.Item key="5">
           <NavLink to="/learnings">
             <span
               className="icon"
@@ -233,7 +330,12 @@ function Sidenav({ color }) {
             <span className="label">Learnings</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="4">
+        <hr/>
+        <div className="brand">
+        <img src={logo} alt="" />
+        <span>User Dashboard</span>
+      </div>
+        <Menu.Item key="6">
           <NavLink to="/ordawlt">
             <span
               className="icon"
@@ -246,8 +348,8 @@ function Sidenav({ color }) {
             <span className="label">Order and Wallet</span>
           </NavLink>
         </Menu.Item>
-      
-      
+       */}
+
         {/* <Menu.Item key="7">
           <NavLink to="/sign-in">
             <span className="icon">{signin}</span>
