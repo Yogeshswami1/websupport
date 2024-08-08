@@ -14,11 +14,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors(
-  {
-    origin:["https://deploy-mern"]
-  }
-));
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/test", middleware, (req, res) => {
@@ -50,4 +46,3 @@ mongoose
   .catch((error) => {
     console.log("Error connecting to MongoDB:", error.message);
   });
-

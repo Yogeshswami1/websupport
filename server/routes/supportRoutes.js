@@ -68,8 +68,8 @@ router.get("/getallappointments", getAllAppointment);
 router.get("/getallmanagers", getAllManagers);
 router.post("/reviewappointment/:id", review);
 router.put("/addmanagercomment/:id", managerReview);
-router.put("/addComment/:id",addComment);
-router.get("/appointmentbyid/:id",getAppointmentsDetails);
+router.put("/addComment/:id", addComment);
+router.get("/appointmentbyid/:id", getAppointmentsDetails);
 
 export default router;
 
