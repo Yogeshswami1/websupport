@@ -74,9 +74,13 @@ const SupportUserDashboardMenu = () => {
       assignee: values.manager,
     };
     axios
-      .post("http://localhost:5000/api/support/newticket", formattedValues, {
-        headers: { Authorization: localStorage.getItem("token") },
-      })
+      .post(
+        "https://server-kappa-ten-43.vercel.app/api/support/newticket",
+        formattedValues,
+        {
+          headers: { Authorization: localStorage.getItem("token") },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setIsModalVisible(false);
@@ -235,7 +239,7 @@ const SupportUserDashboardMenu = () => {
           fontSize: "medium",
           boxShadow: 5,
           "&:hover": {
-            backgroundColor: "white",
+            color: "blue",
           },
         }}
         onClick={handleLogout}

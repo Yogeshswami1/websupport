@@ -4,7 +4,6 @@ import SupportNavbar from "../components/layout/SupportNavbar";
 import "./SupportUserDashboard.css";
 
 const SupportAppointment = () => {
-
   return (
     <>
       <SupportNavbar />

@@ -28,6 +28,15 @@ import { review } from "../controllers/review.js";
 import { managerReview } from "../controllers/managerReview.js";
 import { addComment } from "../controllers/addComment.js";
 import { getAppointmentsDetails } from "../controllers/getAppointmentDetails.js";
+import { addCommentAndClose } from "../controllers/addAndCloseTicekt.js";
+import { makeHoliday } from "../controllers/makeHoliday.js";
+import { getHoliday } from "../controllers/getHoliday.js";
+import { endHoliday } from "../controllers/endHoliday.js";
+import { getSpecificManager } from "../controllers/getSpecificManager.js";
+import { handleButtonClick } from "../controllers/clickController.js";
+import { addPlatform } from "../controllers/addPlatform.js";
+import { getPlatform } from "../controllers/getPlatform.js";
+import { assignPlatform } from "../controllers/assignPlatform.js";
 
 const router = express.Router();
 
@@ -50,11 +59,21 @@ router.post("/user-login", userLogin);
 router.post("/managerlogin", managerLogin);
 router.post("/newticket", middleware, newTicket);
 router.get("/getticket", middleware, getTicket);
+router.post("/make-holiday", makeHoliday);
+router.get("/holiday", getHoliday);
+
+router.post("/click", handleButtonClick);
 
 router.get("/ticketbyid/:id", getTicketById);
 router.put("/updateuserticket/:id", updateUserTicket);
 router.put("/updateappointmentbyid/:id", updateAppointment);
 router.put("/closeticket/:id", closeTicket);
+router.post("/end-holiday", endHoliday);
+router.get("/getmanager/:id", getSpecificManager);
+router.post("/add-platform", addPlatform);
+router.get("/getplatform", getPlatform);
+router.put("/assign-platform/:id", assignPlatform);
+router.get("/get-platform", getPlatform);
 
 router.post("/adminlogin", adminLogin);
 router.get("/openticket", middleware, openUserTicket);
@@ -68,7 +87,9 @@ router.get("/getallappointments", getAllAppointment);
 router.get("/getallmanagers", getAllManagers);
 router.post("/reviewappointment/:id", review);
 router.put("/addmanagercomment/:id", managerReview);
+router.put("/addcommentandclose/:id", addCommentAndClose);
 router.put("/addComment/:id", addComment);
+
 router.get("/appointmentbyid/:id", getAppointmentsDetails);
 
 export default router;

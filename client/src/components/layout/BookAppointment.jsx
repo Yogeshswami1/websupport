@@ -3,7 +3,10 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import { useEffect } from "react";
+import { Row, Col } from "antd";
 import StepLabel from "@mui/material/StepLabel";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import {
   Button,
   Modal,
@@ -25,71 +28,67 @@ import { useState } from "react";
 dayjs.extend(customParseFormat);
 
 const steps = ["Details", "Services", "Time and date"];
-const dropDownStyle = {
-  width: 470,
-};
-
-const arr = [
-  { title: "Amazon.com", options: ["Mukesh", "Charu", "Prakash(Amazon.in)"] },
-  {
-    title: "Flipkart",
-    options: ["Dipanshu", "SM6(Ujwal)", "Team Leader7(Ramesh)"],
-  },
-  { title: "Meesho", options: ["Dinesh", "Team Leader4(Rahul)", "Yogendra"] },
-  { title: "Esty", options: ["Team Leader3(Ritu)", "SM13(Akhil)"] },
-  {
-    title: "Amazon India",
-    options: ["Dipanshu", "Mukesh", "Team Leader4(Rahul)"],
-  },
-  { title: "Website", options: ["Team Leader7(Ramesh)", "SM6(Ujwal)"] },
-];
 
 const timeSlots = [
-  "10:05 am",
-  "10:10 am",
-  "10:15 am",
-  "10:20 am",
-  "10:25 am",
-  "10:30 am",
-  "10:35 am",
-  "10:40 am",
-  "10:45 am",
-  "10:50 am",
-  "11:00 am",
-  "11:10 am",
-  "11:20 am",
-  "11:30 am",
-  "11:40 am",
-  "11:50 am",
-  "12:00 pm",
-  "12:10 pm",
-  "12:20 pm",
-  "12:30 pm",
-  "12:40 pm",
-  "12:50 pm",
-  "1:00 pm",
-  "1:10 pm",
-  "1:20 pm",
-  "1:30 pm",
-  "1:40 pm",
-  "1:50 pm",
-  "2:00 pm",
-  "2:10 pm",
-  "2:20 pm",
-  "2:30 pm",
-  "2:40 pm",
-  "2:50 pm",
+  "10:05",
+  "10:10",
+  "10:15",
+  "10:20",
+  "10:25",
+  "10:30",
+  "10:35",
+  "10:40",
+  "10:45",
+  "10:50",
+  "11:00",
+  "11:10",
+  "11:20",
+  "11:30",
+  "11:40",
+  "11:50",
+  "12:00",
+  "12:10",
+  "12:20",
+  "12:30",
+  "12:40",
+  "12:50",
+  "13:00",
+  "13:10",
+  "13:20",
+  "13:30",
+  "13:40",
+  "13:50",
+  "14:00",
+  "14:10",
+  "14:20",
+  "14:30",
+  "14:40",
+  "14:50",
 ];
 
 export default function BookAppointment() {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState({
-    title: "Amazon.com",
-    options: ["Mukesh", "Charu", "Prakash(Amazon.in)"],
-  });
-    const [appointments, setAppointments] = useState([]);
-    console.log(appointments)
+  const [platforms, setPlatforms] = useState([]);
 
+  const [selectedPlatform, setSelectedPlatform] = useState({});
+  const [appointments, setAppointments] = useState([]);
+
+  const getPlatform = async () => {
+    try {
+      const response = await axios.get(
+        "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      setPlatforms(response.data);
+    } catch (err) {
+      console.log("Error fetching platforms:", err);
+    }
+  };
 
   const openNotificationWithIcon = (type, message, description) => {
     notification[type]({
@@ -102,6 +101,23 @@ export default function BookAppointment() {
   const handleFinish = (values) => {
     console.log("Form values:", values);
 
+    const now = new Date();
+    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+    const recentAppointments = appointments.filter((appointment) => {
+      const appointmentDate = new Date(appointment.date);
+      return appointmentDate >= twentyFourHoursAgo && appointmentDate <= now;
+    });
+
+    if (recentAppointments.length >= 3) {
+      openNotificationWithIcon(
+        "error",
+        "Booking Limit Reached",
+        "You can only book 3 appointments within a 24-hour period. Please try again later."
+      );
+      return; // Prevent booking
+    }
+
     const formattedValues = {
       ...values,
       date: values.date.format("YYYY-MM-DD"),
@@ -109,7 +125,7 @@ export default function BookAppointment() {
 
     axios
       .post(
-        "http://localhost:5000/api/support/appointmentRoute",
+        "https://server-kappa-ten-43.vercel.app/api/support/appointmentRoute",
         formattedValues,
         {
           headers: { Authorization: localStorage.getItem("token") },
@@ -137,34 +153,35 @@ export default function BookAppointment() {
 
   const [form] = Form.useForm();
 
-    const getAppointments = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/support/getappointments",
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
-        console.log("API Response:", response.data);
-        if (Array.isArray(response.data)) {
-          // Sort the appointments by date in descending order
-          const sortedAppointments = response.data.sort(
-            (a, b) => new Date(b.date) - new Date(a.date)
-          );
-          setAppointments(sortedAppointments);
-        } else {
-          console.error("Error: API response is not an array", response.data);
+  const getAppointments = async () => {
+    try {
+      const response = await axios.get(
+        "https://server-kappa-ten-43.vercel.app/api/support/getappointments",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
         }
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
+      );
+      console.log("API Response:", response.data);
+      if (Array.isArray(response.data)) {
+        // Sort the appointments by date in descending order
+        const sortedAppointments = response.data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setAppointments(sortedAppointments);
+      } else {
+        console.error("Error: API response is not an array", response.data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
 
-    useEffect(() => {
-      getAppointments();
-    }, []);
+  useEffect(() => {
+    getAppointments();
+    getPlatform();
+  }, []);
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -307,10 +324,31 @@ export default function BookAppointment() {
   };
 
   const handleSubmit = async () => {
+    const now = new Date();
+    const startOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+
+    const todayAppointments = appointments.filter((appointment) => {
+      const appointmentDate = new Date(appointment.date);
+      return appointmentDate >= startOfDay && appointmentDate <= now;
+    });
+
+    if (todayAppointments.length >= 3) {
+      openNotificationWithIcon(
+        "error",
+        "Booking Limit Reached",
+        "You can only book 3 appointments within a day. Please try again tomorrow."
+      );
+      return; // Prevent booking
+    }
+
     console.log("Form Data:", formData);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/support/appointmentRoute",
+        "https://server-kappa-ten-43.vercel.app/api/support/appointmentRoute",
         formData
       );
       console.log("Appointment booked successfully", response.data);
@@ -319,6 +357,7 @@ export default function BookAppointment() {
         "Appointment Booked",
         "Your appointment has been successfully booked."
       );
+      getAppointments(); // Update the appointments list
     } catch (error) {
       console.error("Error booking appointment", error);
       openNotificationWithIcon(
@@ -333,223 +372,285 @@ export default function BookAppointment() {
     switch (step) {
       case 0:
         return (
-          <div style={{ padding: "0 20px 10px 20px" }}>
+          <div
+            style={{
+              marginTop: "20px",
+            }}
+          >
             <Form form={form} layout="vertical" onFinish={handleFinish}>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="name"
-                label="Full Name"
-                required
-                rules={[
-                  { required: true, message: "Please enter your full name" },
-                ]}
-              >
-                <Input
-                  type="text"
-                  name="name"
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="email"
-                label="Email"
-                rules={[{ required: true, message: "Please enter your email" }]}
-              >
-                <Input
-                  type="email"
-                  name="email"
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="number"
-                label="Phone Number"
-                rules={[
-                  { required: true, message: "Please enter your phone number" },
-                ]}
-              >
-                <Input
-                  type="tel"
-                  name="number"
-                  onChange={(e) =>
-                    setFormData({ ...formData, number: e.target.value })
-                  }
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="subject"
-                label="Subject"
-                rules={[
-                  { required: true, message: "Please enter your subject" },
-                ]}
-              >
-                <Input
-                  type="text"
-                  name="subject"
-                  onChange={(e) =>
-                    setFormData({ ...formData, subject: e.target.value })
-                  }
-                />
-              </Form.Item>
+              <Row gutter={[16, 16]}>
+                {" "}
+                <Col xs={24} md={24}>
+                  {" "}
+                  <Form.Item
+                    name="name"
+                    label="Full Name"
+                    required
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your full name",
+                      },
+                    ]}
+                  >
+                    <Input
+                      type="text"
+                      name="name"
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={12}>
+                  {" "}
+                  <Form.Item
+                    name="email"
+                    label="Email"
+                    rules={[
+                      { required: true, message: "Please enter your email" },
+                    ]}
+                  >
+                    <Input
+                      type="email"
+                      name="email"
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={12}>
+                  {" "}
+                  <Form.Item
+                    name="number"
+                    label="Phone Number"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your phone number",
+                      },
+                    ]}
+                  >
+                    <Input
+                      type="tel"
+                      name="number"
+                      onChange={(e) =>
+                        setFormData({ ...formData, number: e.target.value })
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24}>
+                  {" "}
+                  {/* Full width on mobile, regardless of screen size */}
+                  <Form.Item
+                    name="subject"
+                    label="Subject"
+                    rules={[
+                      { required: true, message: "Please enter your subject" },
+                    ]}
+                  >
+                    <Input
+                      type="text"
+                      name="subject"
+                      onChange={(e) =>
+                        setFormData({ ...formData, subject: e.target.value })
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form>
           </div>
         );
       case 1:
         return (
-          <div style={{ padding: "0 20px 10px 20px" }}>
+          <div style={{ marginTop: "20px" }}>
             <Form form={form} layout="vertical" onFinish={handleFinish}>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="enrollment"
-                label="Enrollment Number"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your enrollment number",
-                  },
-                ]}
-              >
-                <Input
-                  type="text"
-                  name="enrollment"
-                  onChange={(e) =>
-                    setFormData({ ...formData, enrollment: e.target.value })
-                  }
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="platform"
-                label="Platform"
-                rules={[
-                  { required: true, message: "Please choose your platform!" },
-                ]}
-              >
-                <Select
-                  placeholder="Choose your platform"
-                  style={{ width: "100%" }}
-                  onChange={(value) => {
-                    setFormData({ ...formData, platform: value });
-                    console.log(value);
-                    const platform = arr.find((ar) => ar.title === value);
-                    setSelectedPlatform(platform);
-                  }}
-                  options={arr.map((ar) => ({
-                    value: ar.title,
-                    label: ar.title,
-                  }))}
-                  // options={[
-                  //   { label: "Amazon.com", value: "amazon.com" },
-                  //   { label: "Flipkart", value: "flipkart" },
-                  //   { label: "Meesho", value: "meesho" },
-                  //   { label: "Etsy", value: "etsy" },
-                  //   { label: "Amazon India", value: "amazon-india" },
-                  //   { label: "Website", value: "website" },
-                  // ]}
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="manager"
-                label="Managers"
-                rules={[
-                  { required: true, message: "Please choose your managers!" },
-                ]}
-              >
-                <Select
-                  style={{ width: "100%" }}
-                  placeholder="Choose your manager"
-                  onChange={(manager) =>
-                    setFormData({ ...formData, manager: manager })
-                  }
-                  options={selectedPlatform?.options?.map((option) => ({
-                    label: option,
-                    value: option,
-                  }))}
-                  // options={[
-                  //   { label: "SM1(Manish)", value: "sm1(manish)" },
-                  //   { label: "Mukesh", value: "mukesh" },
-                  //   { label: "Charu", value: "charu" },
-                  //   { label: "Yogendra", value: "yogendra" },
-                  //   { label: "Dipanshu", value: "dipanshu" },
-                  //   { label: "SM6(Ujwal)", value: "sm6(ujwal)" },
-                  //   {
-                  //     label: "TEAM Leader7(Ramesh)",
-                  //     value: "team-leader7(ramesh)",
-                  //   },
-                  //   { label: "Dinesh", value: "dinesh" },
-                  //   {
-                  //     label: "Team Leader 4 (Rahul)",
-                  //     value: "team-leader4(rahul)",
-                  //   },
-                  //   { label: "Prakash(Amazon.in)", value: "Prakash(Amazon.in)" },
-                  //   { label: "Team Leader 3 (Ritu)", value: "team-leader3(ritu)" },
-                  //   { label: "SMB (Uzair)", value: "smb(uzair)" },
-                  //   { label: "SM 13 (Akhil)", value: "sm13(akhil)" },
-                  // ]}
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="description"
-                label="Description"
-                rules={[
-                  { required: true, message: "Please enter the description" },
-                ]}
-              >
-                <Input.TextArea
-                  name="description"
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                />
-              </Form.Item>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} md={12}>
+                  <Form.Item
+                    name="enrollment"
+                    label="Enrollment Number"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your enrollment number",
+                      },
+                    ]}
+                  >
+                    <Input
+                      type="text"
+                      name="enrollment"
+                      onChange={(e) =>
+                        setFormData({ ...formData, enrollment: e.target.value })
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} md={12}>
+                  <Form.Item
+                    name="platform"
+                    label="Platform"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please choose your platform!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Choose your platform"
+                      style={{ width: "100%" }}
+                      onChange={(value) => {
+                        setFormData({ ...formData, platform: value });
+                        const platform = platforms.find(
+                          (ar) => ar._id === value
+                        );
+                        setSelectedPlatform(platform);
+                      }}
+                      options={platforms.map((platform) => ({
+                        value: platform._id,
+                        label: platform.platform,
+                      }))}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24} md={12}>
+                  <Form.Item
+                    name="manager"
+                    label="Managers"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please choose your managers!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      style={{ width: "100%" }}
+                      placeholder="Choose your manager"
+                      onChange={(manager) =>
+                        setFormData({ ...formData, manager: manager })
+                      }
+                      options={selectedPlatform?.managers?.map((option) => ({
+                        value: option.name,
+                        label: option.name,
+                      }))}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24}>
+                  <Form.Item
+                    name="description"
+                    label="Description"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter the description",
+                      },
+                    ]}
+                  >
+                    <Input.TextArea
+                      name="description"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form>
           </div>
         );
       case 2:
         return (
-          <div style={{ padding: "0 20px 10px 20px" }}>
+          <div style={{ marginTop: "20px" }}>
             <Form form={form} layout="vertical" onFinish={handleFinish}>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="date"
-                label="Date"
-                rules={[{ required: true, message: "Please select a date" }]}
-              >
-                <DatePicker
-                  style={{ width: "75%" }}
-                  name="date"
-                  onChange={(date) => setFormData({ ...formData, date: date })}
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ width: "75%" }}
-                name="time"
-                label="Time"
-                rules={[{ required: true, message: "Please select a time" }]}
-              >
-                <Radio.Group
-                  style={{ width: "75%" }}
-                  name="time"
-                  onChange={(e) =>
-                    setFormData({ ...formData, time: e.target.value })
-                  }
-                >
-                  {timeSlots.map((slot) => (
-                    <Radio.Button key={slot} value={slot}>
-                      {slot}
-                    </Radio.Button>
-                  ))}
-                </Radio.Group>
-              </Form.Item>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} md={12}>
+                  <Form.Item
+                    name="date"
+                    label="Date"
+                    rules={[
+                      { required: true, message: "Please select a date" },
+                    ]}
+                  >
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      name="date"
+                      onChange={(date) =>
+                        setFormData({ ...formData, date: date })
+                      }
+                      disabledDate={(current) => {
+                        // Disable all past dates and dates more than 2 days in the future
+                        const today = dayjs();
+                        const twoDaysLater = dayjs().add(2, "day");
+                        return (
+                          current &&
+                          (current < today.startOf("day") ||
+                            current > twoDaysLater.endOf("day"))
+                        );
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={24}>
+                  <Form.Item
+                    name="time"
+                    label="Time"
+                    rules={[
+                      { required: true, message: "Please select a time" },
+                    ]}
+                  >
+                    <Radio.Group
+                      style={{ width: "100%" }}
+                      name="time"
+                      onChange={(e) =>
+                        setFormData({ ...formData, time: e.target.value })
+                      }
+                    >
+                      {timeSlots
+                        ?.filter((slot) => {
+                          if (!formData.date) return true; // If no date is selected, show all times
+
+                          const selectedDate = formData.date.startOf("day");
+                          const today = dayjs().startOf("day");
+                          const tomorrow = dayjs().add(1, "day").startOf("day");
+
+                          let [hour, minute] = slot.split(":");
+                          let slotTime = dayjs()
+                            .set("hour", hour)
+                            .set("minute", minute);
+
+                          if (selectedDate.isSame(today)) {
+                            // Hide past time slots for today's date
+                            return slotTime.isAfter(dayjs());
+                          } else if (selectedDate.isSame(tomorrow)) {
+                            // Show all time slots for tomorrow
+                            return true;
+                          } else {
+                            // Show all times for future dates
+                            return true;
+                          }
+                        })
+                        .map((slot) => (
+                          <Radio.Button key={slot} value={slot}>
+                            {slot}
+                          </Radio.Button>
+                        ))}
+                    </Radio.Group>
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form>
           </div>
         );
@@ -559,7 +660,7 @@ export default function BookAppointment() {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "70%", marginTop: "50px", marginBottom: "40px" }}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
@@ -571,7 +672,10 @@ export default function BookAppointment() {
 
           return (
             <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
+              {/* Show only the current step label on mobile */}
+              <StepLabel {...labelProps}>
+                {isMobile ? (activeStep === index ? label : null) : label}
+              </StepLabel>
             </Step>
           );
         })}
@@ -590,17 +694,30 @@ export default function BookAppointment() {
         ) : (
           <React.Fragment>
             {getStepContent(activeStep)}
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                sx={{ mr: 1 }}
+                style={{
+                  backgroundColor: "blue",
+                  color: "white",
+                  width: "120px",
+                  fontWeight: "bold",
+                }}
               >
                 Back
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleNext}>
+              <Button
+                style={{
+                  backgroundColor: "blue",
+                  color: "white",
+                  width: "120px",
+                  fontWeight: "bold",
+                }}
+                onClick={handleNext}
+              >
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </Button>
             </Box>

@@ -11,7 +11,7 @@ const RaiseTicket = () => {
 
   const buttonStyle = {
     position: "absolute",
-    right: "50px",
+    right: "15px",
     top: "30px",
     background: "white",
     color: "black",
@@ -21,6 +21,15 @@ const RaiseTicket = () => {
     boxShadow:
       "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
     border: "2px solid white",
+  };
+
+  const mobileButtonStyle = {
+    ...buttonStyle,
+    fontSize: "10px", 
+    right: "10px", 
+    top: "30px",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   const openNotificationWithIcon = (type, message, description) => {
@@ -43,7 +52,7 @@ const RaiseTicket = () => {
     console.log("Form values:", values);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/support/user-login",
+        "https://server-kappa-ten-43.vercel.app/api/support/user-login",
         values
       );
 
@@ -63,7 +72,7 @@ const RaiseTicket = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
 
-      setIsAuthenticated(true); // Set authentication state to true
+      setIsAuthenticated(true); 
     } catch (error) {
       console.error(error);
       openNotificationWithIcon(
@@ -75,12 +84,16 @@ const RaiseTicket = () => {
   };
 
   if (isAuthenticated) {
-    return <Redirect to="/supportuserdashboard" />; // Redirect to the dashboard
+    return <Redirect to="/supportuserdashboard" />; 
   }
 
   return (
     <div>
-      <Button style={buttonStyle} type="primary" onClick={showModal}>
+      <Button
+        style={window.innerWidth <= 768 ? mobileButtonStyle : buttonStyle}
+        type="primary"
+        onClick={showModal}
+      >
         Raise Ticket
       </Button>
       <Modal

@@ -20,7 +20,7 @@ const BookAppointmentForm = () => {
   const [form] = Form.useForm();
 
   const buttonStyle = {
-    backgroundColor: "#353979",
+    backgroundColor: "#5A51C1",
     color: "White",
     borderRadius: "20px",
     fontWeight: "bold",
@@ -65,7 +65,7 @@ const BookAppointmentForm = () => {
 
     axios
       .post(
-        "http://localhost:5000/api/support/appointmentRoute",
+        "https://server-kappa-ten-43.vercel.app/api/support/appointmentRoute",
         formattedValues,
         {
           headers: { Authorization: localStorage.getItem("token") },
@@ -339,7 +339,7 @@ export default BookAppointmentForm;
 
 //     axios
 //       .post(
-//         "http://localhost:5000/api/support/appointmentRoute",
+//         "https://server-kappa-ten-43.vercel.app/api/support/appointmentRoute",
 //         formattedValues,
 //         {
 //           headers: { Authorization: localStorage.getItem("token") },

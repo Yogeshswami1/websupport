@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, notification, Modal, Form, Input, Select } from "antd";
 import { NavLink, useLocation, useHistory, Redirect } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import logo from "../../assets/images/logo.png";
+import "./UserSidebar.css";
 import axios from "axios";
 
 const { Option } = Select;
@@ -12,12 +13,31 @@ const { Option } = Select;
 function UserSidebar({ color }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loggedout, setLoggedout] = useState(false);
+  const [platforms, setPlatforms] = useState([]);
+  const [selectedPlatform, setSelectedPlatform] = useState({});
   const [form] = Form.useForm();
 
   const history = useHistory();
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
-
+  const getPlatform = async () => {
+    try {
+      const response = await axios.get(
+        "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      setPlatforms(response.data);
+    } catch (err) {
+      console.log("Error fetching platforms:", err);
+    }
+  };
+  useEffect(() => {
+    getPlatform();
+  }, []);
   const dashboard = [
     <svg
       width="20"
@@ -78,14 +98,18 @@ function UserSidebar({ color }) {
       ...values,
       userId: localStorage.getItem("id"),
       name: localStorage.getItem("name"),
-      status: "open",
+      status: "Open",
       priority: "normal",
       assignee: values.manager,
     };
     axios
-      .post("http://localhost:5000/api/support/newticket", formattedValues, {
-        headers: { Authorization: localStorage.getItem("token") },
-      })
+      .post(
+        "https://server-kappa-ten-43.vercel.app/api/support/newticket",
+        formattedValues,
+        {
+          headers: { Authorization: localStorage.getItem("token") },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setIsModalVisible(false);
@@ -113,15 +137,16 @@ function UserSidebar({ color }) {
   return (
     <div style={{ marginTop: "100px" }}>
       <h1 style={{ fontWeight: "bold" }}>
-        Welcom back {localStorage.getItem("name")}
+        Welcom Back {localStorage.getItem("name")}
       </h1>
+
       <Menu theme="light" mode="inline">
         <Menu.Item key="1">
           <NavLink to="/supportuserdash">
             <span
               className="icon"
               style={{
-                background: page === "dashboard" ? color : "rgb(53, 57, 121)",
+                background: page === "dashboard" ? color : "#5A51C1",
               }}
             >
               {dashboard}
@@ -134,7 +159,7 @@ function UserSidebar({ color }) {
             <span
               className="icon"
               style={{
-                background: page === "appointment" ? color : "rgb(53, 57, 121)",
+                background: page === "appointment" ? color : "#5A51C1",
               }}
             >
               {dashboard}
@@ -147,7 +172,7 @@ function UserSidebar({ color }) {
             <span
               className="icon"
               style={{
-                background: page === "openticket" ? color : "rgb(53, 57, 121)",
+                background: page === "openticket" ? color : "#5A51C1",
               }}
             >
               {dashboard}
@@ -159,7 +184,7 @@ function UserSidebar({ color }) {
           <span
             className="icon"
             style={{
-              background: "rgb(53, 57, 121)",
+              background: "#5A51C1",
               marginLeft: "16px",
               marginTop: "15px",
               marginBottom: "15px",
@@ -178,7 +203,7 @@ function UserSidebar({ color }) {
             <span
               className="icon"
               style={{
-                background: page === "logout" ? color : "rgb(53, 57, 121)",
+                background: page === "logout" ? color : "#5A51C1",
               }}
             >
               <LogoutIcon />
@@ -187,7 +212,6 @@ function UserSidebar({ color }) {
           </NavLink>
         </Menu.Item>
       </Menu>
-
       <Modal
         title="New Ticket"
         visible={isModalVisible}
@@ -196,20 +220,35 @@ function UserSidebar({ color }) {
       >
         <Form layout="vertical" onFinish={onFinish} form={form}>
           <Form.Item
+            style={{ width: "100%" }}
             name="platform"
             label="Platform"
-            rules={[{ required: true, message: "Please select a platform!" }]}
+            rules={[
+              { required: true, message: "Please choose your platform!" },
+            ]}
           >
-            <Select placeholder="Select a platform">
-              <Option value="amazon">Amazon.in</Option>
-              <Option value="flipkart">Flipkart</Option>
-              <Option value="meesho">Meesho</Option>
-              <Option value="esty">Esty</Option>
-              <Option value="website">Website</Option>
-              <Option value="amazon india">Amazon India</Option>
-            </Select>
-          </Form.Item>
+            <Select
+              placeholder="Choose your platform"
+              style={{ width: "100%" }}
+              onChange={(value) => {
+                const platform = platforms.find((ar) => ar._id === value);
 
+                setSelectedPlatform(platform);
+              }}
+              options={platforms.map((platform) => ({
+                value: platform._id,
+                label: platform.platform,
+              }))}
+              // options={[
+              //   { label: "Amazon.com", value: "amazon.com" },
+              //   { label: "Flipkart", value: "flipkart" },
+              //   { label: "Meesho", value: "meesho" },
+              //   { label: "Etsy", value: "etsy" },
+              //   { label: "Amazon India", value: "amazon-india" },
+              //   { label: "Website", value: "website" },
+              // ]}
+            />
+          </Form.Item>
           <Form.Item
             name="description"
             label="Description"
@@ -220,28 +259,42 @@ function UserSidebar({ color }) {
             <Input.TextArea />
           </Form.Item>
           <Form.Item
+            style={{ width: "100%" }}
             name="manager"
             label="Managers"
-            rules={[{ required: true, message: "Please select a manager!" }]}
+            rules={[
+              { required: true, message: "Please choose your managers!" },
+            ]}
           >
-            <Select placeholder="Select a manager">
-              <Option value="SM 1">SM 1</Option>
-              <Option value="SM 2">SM 2</Option>
-              <Option value="SM 3">SM 3</Option>
-              <Option value="SM 8">SM 8</Option>
-              <Option value="Team Leader 2(Habib)">Team Leader 2(Habib)</Option>
-              <Option value="Prakash(Esty)">Prakash(Esty)</Option>
-              <Option value="Prakash(Amazon.in)">Prakash(Amazon.in)</Option>
-              <Option value="Dipanshu(Amazon.com)">Dipanshu(Amazon.com)</Option>
-              <Option value="Team Leader 6 Ujjawal (Amazon.in)">
-                Team Leader 6 Ujjawal (Amazon.in)
-              </Option>
-              <Option value="Mukesh (Payment)">Mukesh (Payment)</Option>
-              <Option value="Dinesh (Glowroad)">Dinesh (Glowroad)</Option>
-              <Option value="Team Leader 7 (Meesho)">
-                Team Leader 7 (Meesho)
-              </Option>
-            </Select>
+            <Select
+              style={{ width: "100%" }}
+              placeholder="Choose your manager"
+              options={selectedPlatform?.managers?.map((option) => ({
+                value: option.name,
+                label: option.name,
+              }))}
+              // options={[
+              //   { label: "SM1(Manish)", value: "sm1(manish)" },
+              //   { label: "Mukesh", value: "mukesh" },
+              //   { label: "Charu", value: "charu" },
+              //   { label: "Yogendra", value: "yogendra" },
+              //   { label: "Dipanshu", value: "dipanshu" },
+              //   { label: "SM6(Ujwal)", value: "sm6(ujwal)" },
+              //   {
+              //     label: "TEAM Leader7(Ramesh)",
+              //     value: "team-leader7(ramesh)",
+              //   },
+              //   { label: "Dinesh", value: "dinesh" },
+              //   {
+              //     label: "Team Leader 4 (Rahul)",
+              //     value: "team-leader4(rahul)",
+              //   },
+              //   { label: "Prakash(Amazon.in)", value: "Prakash(Amazon.in)" },
+              //   { label: "Team Leader 3 (Ritu)", value: "team-leader3(ritu)" },
+              //   { label: "SMB (Uzair)", value: "smb(uzair)" },
+              //   { label: "SM 13 (Akhil)", value: "sm13(akhil)" },
+              // ]}
+            />
           </Form.Item>
           <Form.Item>
             <button

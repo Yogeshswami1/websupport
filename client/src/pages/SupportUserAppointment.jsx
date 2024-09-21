@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { Form, Input, Modal, Rate, notification } from "antd";
+import { Form, Input, Modal, Rate, notification, Radio } from "antd";
 import Loader from "../components/layout/Loader";
 import moment from "moment";
 import UserLayout from "../components/layout/UserLayout";
@@ -34,7 +34,7 @@ const SupportUserAppointment = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/support/getappointments",
+        "https://server-kappa-ten-43.vercel.app/api/support/getappointments",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -43,7 +43,6 @@ const SupportUserAppointment = () => {
       );
       console.log("API Response:", response.data);
       if (Array.isArray(response.data)) {
-        // Sort the appointments by date in descending order
         const sortedAppointments = response.data.sort(
           (a, b) => new Date(b.date) - new Date(a.date)
         );
@@ -69,11 +68,23 @@ const SupportUserAppointment = () => {
   const getRowStyle = (status) => {
     switch (status) {
       case "pending":
-        return { backgroundColor: "RGB(248,222,126)" };
+        return {
+          backgroundColor: "#FFD9D6",
+          color: "#FF7A70",
+          fontWeight: "bold",
+        };
       case "open":
-        return { backgroundColor: "rgb(41,171,135)", color: "white" };
+        return {
+          backgroundColor: "rgb(203,234,205)",
+          color: "green",
+          fontWeight: "bold",
+        };
       case "closed":
-        return { backgroundColor: "rgb(41,171,135)", color: "white" };
+        return {
+          backgroundColor: "#E3E4DD",
+          color: "rgb(54, 51, 51)",
+          fontWeight: "bold",
+        };
       default:
         return {};
     }
@@ -105,7 +116,7 @@ const SupportUserAppointment = () => {
     console.log(values);
     try {
       await axios.post(
-        `http://localhost:5000/api/support/reviewappointment/${selectedAppointment._id}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/reviewappointment/${selectedAppointment._id}`,
         values,
         {
           headers: {
@@ -119,6 +130,7 @@ const SupportUserAppointment = () => {
         "Review submitted successfully."
       );
       handleCancel();
+      getAppointments();
     } catch (error) {
       console.error("Error submitting review:", error);
       openNotificationWithIcon(
@@ -175,7 +187,8 @@ const SupportUserAppointment = () => {
       {/* <SupportNavbar /> */}
       <div className="main">
         <div className="menu ">{/* <SupportUserDashboardMenu /> */}</div>
-        <div className="fltr"
+        <div
+          className="fltr"
           style={{
             marginTop: "30px",
             position: "fixed",
@@ -190,27 +203,13 @@ const SupportUserAppointment = () => {
             justifyContent: "center",
           }}
         >
-          <Form layout="inline">
+          <Form layout="inline" className="filteruserapp">
             <Form.Item label="Filter by ID" className="custom-form-item">
               <Input
                 placeholder="Enter appointment id"
                 value={filterId}
                 onChange={handleFilterChange}
               />
-            </Form.Item>
-            <Form.Item label="Filter by Date" className="custom-form-item">
-              <FormControl variant="outlined" size="small">
-                <Select
-                  value={filterOption}
-                  onChange={handleFilterOptionChange}
-                  label="Date Filter"
-                >
-                  <MenuItem value="all">All</MenuItem>
-                  <MenuItem value="day">Today</MenuItem>
-                  <MenuItem value="week">This Week</MenuItem>
-                  <MenuItem value="month">This Month</MenuItem>
-                </Select>
-              </FormControl>
             </Form.Item>
             <Form.Item label="Filter by Status" className="custom-form-item">
               <FormControl variant="outlined" size="small">
@@ -225,9 +224,20 @@ const SupportUserAppointment = () => {
                 </Select>
               </FormControl>
             </Form.Item>
+            <Form.Item className="custom-form-item">
+              <Radio.Group
+                value={filterOption}
+                onChange={handleFilterOptionChange}
+              >
+                <Radio.Button value="all">All</Radio.Button>
+                <Radio.Button value="day">Today</Radio.Button>
+                <Radio.Button value="week">This Week</Radio.Button>
+                <Radio.Button value="month">This Month</Radio.Button>
+              </Radio.Group>
+            </Form.Item>
           </Form>
         </div>
-        <div className="content">
+        <div className="content" id="userapcontent">
           {loadingData ? (
             <Loader />
           ) : filteredAppointments?.length > 0 ? (
@@ -251,6 +261,7 @@ const SupportUserAppointment = () => {
                     key={appointment._id}
                     style={{
                       fontSize: "12px",
+                      fontWeight: "bold",
                     }}
                     onClick={() => handleRowClick(appointment._id)}
                   >
@@ -267,7 +278,7 @@ const SupportUserAppointment = () => {
 
                     {appointment.userReview ? (
                       <td>
-                        <h4>Reviews done</h4>
+                        <h4>{appointment.userReview.rating} Star</h4>
                       </td>
                     ) : (
                       <td>
@@ -291,6 +302,7 @@ const SupportUserAppointment = () => {
                 justifyContent: "center",
                 marginTop: "140px",
               }}
+              id="defauler"
             >
               <h1>No data found</h1>
             </div>

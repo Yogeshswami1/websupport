@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const managerSchema = new mongoose.Schema({
   name: {
@@ -42,6 +42,6 @@ const managerSchema = new mongoose.Schema({
   },
 });
 
-const Manager = mongoose.model('Manager', managerSchema);
+const Manager = mongoose.model("Manager", managerSchema);
 
 export default Manager;

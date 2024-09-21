@@ -22,7 +22,7 @@ const SupportManagerAppointmentDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/support/appointmentbyid/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/appointmentbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -51,7 +51,7 @@ const SupportManagerAppointmentDetails = () => {
   const handleAddComment = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/support/addmanagercomment/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/addmanagercomment/${ticketId}`,
         { comment },
         {
           headers: {
@@ -176,7 +176,11 @@ const SupportManagerAppointmentDetails = () => {
                 onClick={() => setIsModalVisible(true)}
                 style={{ marginBottom: "20px" }}
               >
-                Add Comment
+                {localStorage.getItem("role") != "admin" ? (
+                  <p>Add Comment</p>
+                ) : (
+                  ""
+                )}
               </Button>
               {appointments ? (
                 <Table

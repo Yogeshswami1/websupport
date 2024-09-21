@@ -66,7 +66,6 @@ const UserLayout = ({ children }) => {
               style={{ background: sidenavType }}
             >
               <UserSidebar
-              
                 handleDrawerToggle={handleDrawerToggle}
                 mobileOpen={mobileOpen}
                 setMobileOpen={setMobileOpen}

@@ -43,6 +43,7 @@ import SupportTicketDetails from "./pages/SupportTicketDetails";
 import SupportAdminTicketDetails from "./pages/SupportAdminTicketDetails";
 import SupportAdminOpenTickets from "./pages/SupportAdminOpenTickets";
 import SupportManagerAppointmentDetails from "./pages/SupportManagerAppointmentDetails";
+import SupportManagerDetails from "./pages/SupportManageDetails";
 function App() {
   const history = useHistory();
   const token = localStorage.getItem("token");
@@ -105,6 +106,7 @@ function App() {
             path="/supportadminopentickets"
             component={SupportAdminOpenTickets}
           />
+          <Route path="/manager/:id" component={SupportManagerDetails} />
           <ManagerPrivateRoute
             exact
             path="/supportmanagerdash"

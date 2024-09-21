@@ -17,7 +17,7 @@ const SupportAdminOpenTickets = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/support/getallopenticket",
+        "https://server-kappa-ten-43.vercel.app/api/support/getallopenticket",
         {
           headers: {
             Authorization: localStorage.getItem("token"),

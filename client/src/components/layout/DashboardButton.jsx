@@ -18,7 +18,7 @@ const DashboardButton = ({ userData }) => {
     console.log(userId);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/support/dashboard",
+        "https://server-kappa-ten-43.vercel.app/api/support/dashboard",
         {
           userId: userId,
         }

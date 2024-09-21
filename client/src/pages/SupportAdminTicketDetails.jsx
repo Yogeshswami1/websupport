@@ -29,7 +29,7 @@ const SupportAdminTicketDetails = () => {
     console.log("button data", id);
     try {
       await axios.put(
-        `http://localhost:5000/api/support/closeticket/${id}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/closeticket/${id}`,
         {},
         {
           headers: {
@@ -57,7 +57,7 @@ const SupportAdminTicketDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/support/ticketbyid/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/ticketbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -84,7 +84,7 @@ const SupportAdminTicketDetails = () => {
   const onFinish = async (values) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/support/updateuserticket/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/updateuserticket/${ticketId}`,
         values,
         {
           headers: {
@@ -123,6 +123,8 @@ const SupportAdminTicketDetails = () => {
                     border: "1px solid blue",
                     padding: "30px",
                     borderRadius: "20px",
+                    marginLeft: "120px",
+                    marginTop: "90px",
                   }}
                   layout="vertical"
                   onFinish={onFinish}
@@ -240,8 +242,13 @@ const SupportAdminTicketDetails = () => {
                     </Button>
                   </Form.Item>
                 </Form>
-                <h2 style={{ marginTop: "30px" }}>All comments</h2>
-                <div className="comments-section">
+                <h2 style={{ marginTop: "30px", marginLeft: "120px" }}>
+                  All comments
+                </h2>
+                <div
+                  className="comments-section"
+                  style={{ marginLeft: "120px" }}
+                >
                   {ticket.comments && ticket.comments.length > 0 ? (
                     ticket.comments.map((comment, index) => (
                       <div key={index} className="comment">

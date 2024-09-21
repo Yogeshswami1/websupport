@@ -1,22 +1,27 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import IconButton from '@mui/material/IconButton';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import GoogleIcon from '@mui/icons-material/Google';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import GitHubIcon from '@mui/icons-material/GitHub';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import IconButton from "@mui/material/IconButton";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import GoogleIcon from "@mui/icons-material/Google";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 function Copyright() {
   return (
-    <Typography sx={{color:"white"}} variant="body2" color="text.secondary" align="center">
-      {'© '}
+    <Typography
+      sx={{ color: "white" }}
+      variant="body2"
+      color="text.secondary"
+      align="center"
+    >
+      {"© "}
       {new Date().getFullYear()}
-      {' Copyright: '}
+      {" Copyright: "}
       <Link color="inherit" href="https://saumiccraft.com/">
         Saumic craft
       </Link>
@@ -25,20 +30,21 @@ function Copyright() {
 }
 
 export default function SupportFooter() {
-  const iconStyle={
-    
-  }
+  const iconStyle = {};
   return (
     <Box
       sx={{
-        bgcolor: 'background.paper',
+        bgcolor: "background.paper",
         pt: 3,
         pb: 2,
-        borderTop: '1px solid #e0e0e0'
+        borderTop: "1px solid #e0e0e0",
       }}
     >
-      <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
           <IconButton href="https://www.facebook.com" color="inherit">
             <FacebookIcon />
           </IconButton>
@@ -60,11 +66,11 @@ export default function SupportFooter() {
         </Box>
         <Box
           sx={{
-            width: '100%',
-            bgcolor: '#d3d3d3',
+            width: "100%",
+            bgcolor: "#d3d3d3",
             pt: 2,
             pb: 2,
-            backgroundColor:"#353979",
+            backgroundColor: "#5A51C1",
           }}
         >
           <Copyright />

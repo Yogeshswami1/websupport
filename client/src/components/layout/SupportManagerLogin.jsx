@@ -4,7 +4,6 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-
 const SupportManagerLogin = () => {
   const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -43,7 +42,10 @@ const SupportManagerLogin = () => {
   const handleFinish = (values) => {
     console.log("Form values:", values);
     axios
-      .post("http://localhost:5000/api/support/managerlogin", values)
+      .post(
+        "https://server-kappa-ten-43.vercel.app/api/support/managerlogin",
+        values
+      )
       .then((response) => {
         localStorage.setItem("name", response.data.name);
         localStorage.setItem("email", response.data.email);
@@ -165,7 +167,7 @@ export default SupportManagerLogin;
 
 //   const handleFinish = (values) => {
 //     console.log('Form values:', values);
-//     axios.post('http://localhost:5000/api/support/managerlogin', values)
+//     axios.post('https://server-kappa-ten-43.vercel.app/api/support/managerlogin', values)
 //       .then(response => {
 //         console.log(response.data);
 //         setIsModalVisible(false);

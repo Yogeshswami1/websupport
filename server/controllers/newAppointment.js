@@ -31,7 +31,7 @@ export const newAppointment = async (req, res) => {
     });
 
     const appointment = await newAppointment.save();
-    console.log(appointment)
+    console.log(appointment);
     res
       .status(200)
       .json({ message: "New appointment created successfully", appointment });

@@ -4,6 +4,7 @@ import axios from "axios";
 import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Form, Select, Input } from "antd";
 
@@ -24,7 +25,7 @@ const SupportAdminDash = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/support/getallticket",
+        "https://server-kappa-ten-43.vercel.app/api/support/getallticket",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -50,13 +51,25 @@ const SupportAdminDash = () => {
   const getRowStyle = (status) => {
     switch (status) {
       case "pending":
-        return { backgroundColor: "RGB(248,222,126)" };
-      case "open":
-        return { backgroundColor: "rgb(41,171,135)", color: "white" };
-      case "closed":
-        return { backgroundColor: "#F88379", color: "white" };
+        return { backgroundColor: "#F9FFEB", color: "#DAFF85" };
+      case "Open":
+        return {
+          backgroundColor: "rgb(203,234,205)",
+          color: "green",
+          fontWeight: "bold",
+        };
+      case "Closed":
+        return {
+          backgroundColor: "#E3E4DD",
+          color: "rgb(54, 51, 51)",
+          fontWeight: "bold",
+        };
       default:
-        return { backgroundColor: "RGB(248,222,126)" };
+        return {
+          backgroundColor: "#FFD9D6",
+          color: "#FF7A70",
+          fontWeight: "bold",
+        };
     }
   };
 
@@ -109,7 +122,7 @@ const SupportAdminDash = () => {
                 style={{ width: 200 }}
               >
                 <Option value="closed">Resolved</Option>
-                <Option value="open">Unresolved</Option>
+                <Option value="Open">Unresolved</Option>
 
                 <Option value="Waiting for customer reply">
                   Waiting for Customer Reply

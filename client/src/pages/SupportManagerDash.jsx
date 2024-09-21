@@ -21,7 +21,7 @@ const SupportManagerDash = () => {
     const name = localStorage.getItem("name");
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/support/getmanagerticket?name=${encodeURIComponent(
+        `https://server-kappa-ten-43.vercel.app/api/support/getmanagerticket?name=${encodeURIComponent(
           name
         )}`,
         {
@@ -53,13 +53,25 @@ const SupportManagerDash = () => {
   const getRowStyle = (status) => {
     switch (status) {
       case "pending":
-        return { backgroundColor: "RGB(248,222,126)" };
-      case "open":
-        return { backgroundColor: "rgb(41,171,135)", color: "white" };
-      case "closed":
-        return { backgroundColor: "#F88379", color: "white" };
+        return { backgroundColor: "#F9FFEB", color: "#DAFF85" };
+      case "Open":
+        return {
+          backgroundColor: "rgb(203,234,205)",
+          color: "green",
+          fontWeight: "bold",
+        };
+      case "Closed":
+        return {
+          backgroundColor: "#E3E4DD",
+          color: "rgb(54, 51, 51)",
+          fontWeight: "bold",
+        };
       default:
-        return { backgroundColor: "RGB(248,222,126)" };
+        return {
+          backgroundColor: "#FFD9D6",
+          color: "#FF7A70",
+          fontWeight: "bold",
+        };
     }
   };
 
@@ -106,7 +118,7 @@ const SupportManagerDash = () => {
           }}
         >
           <Form layout="inline">
-            <Form.Item label="Filter by Status">
+            <Form.Item label="Filter by Status" className="ftlrByStatus">
               <Select
                 placeholder="Select status"
                 onChange={handleStatusChange}
@@ -123,7 +135,7 @@ const SupportManagerDash = () => {
                 </Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Filter by Ticket ID">
+            <Form.Item label="Filter by Ticket ID" className="ftlrByStatus">
               <Input
                 placeholder="Enter ticket id here..."
                 onChange={handleTicketIdChange}

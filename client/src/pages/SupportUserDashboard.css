@@ -29,13 +29,15 @@
 .styled-table {
   border-collapse: collapse;
   margin: 35px 0;
-  font-size: 18px;
+  font-size: 13px;
   width: 100%;
   text-align: left;
 }
-
+.ftlrByStatus {
+  font-weight: bold;
+}
 .styled-table thead tr {
-  background-color: rgb(53, 57, 121);
+  background-color: rgb(54, 51, 51);
   color: #ffffff;
   text-align: left;
 }
@@ -47,14 +49,18 @@
 
 .styled-table tbody tr {
   border-bottom: 1px solid #dddddd;
+  cursor: pointer;
+}
+.styled-table tbody tr:hover {
+  background-color: #e3e3e3;
 }
 
-.styled-table tbody tr:nth-of-type(even) {
+/* .styled-table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
-}
+} */
 
 .styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #2c3e50;
+  border-bottom: 2px solid rgb(90, 81, 193);
 }
 
 .comments-section {
@@ -93,7 +99,7 @@
 
 .custom-form-item .ant-form-item-label > label {
   font-weight: bold;
-  color: #054682;
+  color: rgb(90, 81, 193);
   font-size: 14px;
 }
 
@@ -103,15 +109,43 @@
     padding-left: 15%;
     padding-right: 10%;
   }
+  .fltr {
+    background-color: red;
+  }
 }
 
 @media (max-width: 768px) {
   .main {
     flex-direction: column;
   }
+  .fltr {
+    position: relative;
+    left: 0;
+  }
+
+  .filteruserapp {
+    margin-top: 100px;
+    table-layout: block;
+    background-color: white;
+  }
+  #defauler > h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #userapcontent {
+    margin-top: 110px;
+  }
   .menu {
     position: relative;
     margin-top: 1;
+  }
+  .content {
+    display: flex;
+    overflow-x: scroll;
+  }
+  .custom-form-item {
+    background-color: white;
   }
   .scontent {
     margin: "0 10px 0 10px";
@@ -190,6 +224,7 @@
     margin-top: 0;
     padding-top: 20px;
   }
+
   .styled-table {
     margin-top: 0px;
   }
@@ -197,9 +232,6 @@
   .filter-bar .ant-form-item {
     margin-bottom: 10px;
     width: 100%;
-  }
-  .fltr {
-    margin-top: "30px";
   }
 
   .filter-bar .ant-form-item-label {

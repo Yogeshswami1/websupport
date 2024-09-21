@@ -42,7 +42,10 @@ const SupportAdminLogin = () => {
   const handleFinish = (values) => {
     console.log("Form values:", values);
     axios
-      .post("http://localhost:5000/api/support/adminlogin", values)
+      .post(
+        "https://server-kappa-ten-43.vercel.app/api/support/adminlogin",
+        values
+      )
       .then((response) => {
         localStorage.setItem("name", response.data.name);
         localStorage.setItem("email", response.data.email);
@@ -163,7 +166,7 @@ export default SupportAdminLogin;
 
 //   const handleFinish = (values) => {
 //     console.log('Form values:', values);
-//     axios.post('http://localhost:5000/api/support/adminlogin', values)
+//     axios.post('https://server-kappa-ten-43.vercel.app/api/support/adminlogin', values)
 //       .then(response => {
 //         console.log(response.data);
 //         setIsModalVisible(false);

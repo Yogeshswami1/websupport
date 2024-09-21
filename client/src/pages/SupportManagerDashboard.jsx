@@ -7,7 +7,7 @@ import SupportManagerMenu from "../components/layout/SupportManagerMenu";
 const SupportManagerDashboard = () => {
   const [managerData, setManagerData] = useState({});
   const location = useLocation();
-  
+
   const getRowStyle = (status) => {
     switch (status) {
       case "Pending":

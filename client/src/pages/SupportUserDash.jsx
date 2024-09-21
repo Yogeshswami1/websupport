@@ -8,6 +8,7 @@ import ListIcon from "@mui/icons-material/List";
 import axios from "axios";
 import { Form, Select, Input } from "antd";
 import UserLayout from "../components/layout/UserLayout";
+import { colors } from "@mui/material";
 
 const { Option } = Select;
 
@@ -16,13 +17,13 @@ const SupportUserDash = () => {
   const [tickets, setTickets] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
-  const [ticketIdFilter, setTicketIdFilter] = useState(""); // New state for ticket ID filter
+  const [ticketIdFilter, setTicketIdFilter] = useState("");
 
   const getTicket = async () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/support/getticket",
+        "https://server-kappa-ten-43.vercel.app/api/support/getticket",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -51,13 +52,25 @@ const SupportUserDash = () => {
   const getRowStyle = (status) => {
     switch (status) {
       case "pending":
-        return { backgroundColor: "RGB(248,222,126)" };
-      case "open":
-        return { backgroundColor: "rgb(41,171,135)", color: "white" };
-      case "closed":
-        return { backgroundColor: "#F88379", color: "white" };
+        return { backgroundColor: "#F9FFEB", color: "#DAFF85" };
+      case "Open":
+        return {
+          backgroundColor: "rgb(203,234,205)",
+          color: "green",
+          fontWeight: "bold",
+        };
+      case "Closed":
+        return {
+          backgroundColor: "#E3E4DD",
+          color: "rgb(54, 51, 51)",
+          fontWeight: "bold",
+        };
       default:
-        return { backgroundColor: "RGB(248,222,126)" };
+        return {
+          backgroundColor: "#FFD9D6",
+          color: "#FF7A70",
+          fontWeight: "bold",
+        };
     }
   };
 
@@ -87,7 +100,7 @@ const SupportUserDash = () => {
         <div className="menu ">{/* <SupportUserDashboardMenu /> */}</div>
         <div className="filter-bar">
           <Form layout="inline">
-            <Form.Item label="Filter by Status">
+            <Form.Item label="Filter by Status" className="ftlrByStatus">
               <Select
                 placeholder="Select status"
                 onChange={handleStatusChange}
@@ -95,7 +108,7 @@ const SupportUserDash = () => {
                 style={{ width: 200 }}
               >
                 <Option value="closed">Resolved</Option>
-                <Option value="open">Unresolved</Option>
+                <Option value="Open">Unresolved</Option>
                 <Option value="Waiting for customer reply">
                   Waiting for Customer Reply
                 </Option>
@@ -104,7 +117,7 @@ const SupportUserDash = () => {
                 </Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Filter by Ticket ID">
+            <Form.Item label="Filter by Ticket ID" className="ftlrByStatus">
               <Input
                 placeholder="Enter ticket id here..."
                 onChange={handleTicketIdChange}
@@ -132,7 +145,7 @@ const SupportUserDash = () => {
                 {filteredTickets.map((ticket) => (
                   <tr
                     key={ticket._id}
-                    style={{ fontSize: "12px" }}
+                    style={{ fontSize: "12px", fontWeight: "bold" }}
                     onClick={() => handleRowClick(ticket._id)}
                   >
                     <td>TCK{ticket.ticketId}</td>
@@ -140,7 +153,7 @@ const SupportUserDash = () => {
                     <td>{ticket.description}</td>
                     <td>{ticket.manager}</td>
                     <td>{formatDate(ticket.dateCreated)}</td>
-                    <td>{ticket.dateUpdated}</td>
+                    <td>{formatDate(ticket.dateUpdated)}</td>
                   </tr>
                 ))}
               </tbody>

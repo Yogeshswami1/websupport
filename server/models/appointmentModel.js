@@ -4,7 +4,6 @@ import mongooseSequence from "mongoose-sequence";
 const { Schema, model } = mongoose;
 const AutoIncrement = mongooseSequence(mongoose);
 
-
 const reviewSchema = new Schema({
   comment: {
     type: String,

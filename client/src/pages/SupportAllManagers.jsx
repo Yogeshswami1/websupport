@@ -5,28 +5,27 @@ import axios from "axios";
 import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useHistory } from "react-router-dom";
 
 const { Meta } = Card;
 
 const SupportAllmanager = () => {
   const [managers, setManagers] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
-
-  console.log("all managers", managers);
+  const [hoveredCard, setHoveredCard] = useState(null); // Track hovered card
+  const history = useHistory();
 
   const getManagers = async () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/support/getallmanagers",
+        "https://server-kappa-ten-43.vercel.app/api/support/getallmanagers",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
           },
         }
       );
-      console.log("API Response:", response.data);
       if (Array.isArray(response.data)) {
         setManagers(response.data);
       } else {
@@ -43,7 +42,15 @@ const SupportAllmanager = () => {
   }, []);
 
   const handleCardClick = (id) => {
-    window.location.href = `#${id}`;
+    history.push(`/manager/${id}`);
+  };
+
+  const handleMouseEnter = (id) => {
+    setHoveredCard(id);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredCard(null);
   };
 
   return (
@@ -63,9 +70,18 @@ const SupportAllmanager = () => {
                   <Card
                     style={{
                       boxShadow:
-                        "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+                        hoveredCard === manager._id
+                          ? "0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19)"
+                          : "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+                      transform:
+                        hoveredCard === manager._id
+                          ? "scale(1.05)"
+                          : "scale(1)",
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     }}
                     hoverable
+                    onMouseEnter={() => handleMouseEnter(manager._id)}
+                    onMouseLeave={handleMouseLeave}
                     onClick={() => handleCardClick(manager._id)}
                   >
                     <Meta
@@ -74,12 +90,10 @@ const SupportAllmanager = () => {
                       description={
                         <>
                           <p>Email: {manager.email}</p>
-                          <p>Platfrom: {manager.platform}</p>
+                          <p>Platform: {manager.platform}</p>
                           <p>
                             Date of Joining:{" "}
-                            {new Date(
-                              manager.dateOfJoining
-                            ).toLocaleDateString()}
+                            {new Date(manager.createdAt).toLocaleDateString()}
                           </p>
                         </>
                       }

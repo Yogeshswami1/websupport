@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -15,6 +15,27 @@ const { Item } = Form;
 const SupportManagerMenu = ({ managerData }) => {
   const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [platforms, setPlatforms] = useState([]);
+
+  useEffect(() => {
+    const getPlatform = async () => {
+      try {
+        const response = await axios.get(
+          "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        );
+        setPlatforms(response.data);
+      } catch (err) {
+        console.log("Error fetching platforms:", err);
+      }
+    };
+
+    getPlatform();
+  }, []);
 
   const [form] = Form.useForm();
 
@@ -65,7 +86,10 @@ const SupportManagerMenu = ({ managerData }) => {
       .validateFields()
       .then((values) => {
         axios
-          .post("http://localhost:5000/api/support/create-user", values)
+          .post(
+            "https://server-kappa-ten-43.vercel.app/api/support/create-user",
+            values
+          )
           .then((response) => {
             console.log("Success:", response.data);
             // dispatch(addUser(response.data));
@@ -266,14 +290,10 @@ const SupportManagerMenu = ({ managerData }) => {
             <Select
               placeholder="Choose your platform"
               style={dropDownStyle}
-              options={[
-                { label: "Amazon.com", value: "amazon.com" },
-                { label: "Flipkart", value: "flipkart" },
-                { label: "Meesho", value: "meesho" },
-                { label: "Etsy", value: "etsy" },
-                { label: "Amazon India", value: "amazon-india" },
-                { label: "Website", value: "website" },
-              ]}
+              options={platforms.map((platform) => ({
+                value: platform.platform,
+                label: platform.platform,
+              }))}
             />
           </Form.Item>
           <Item

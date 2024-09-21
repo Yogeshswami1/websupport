@@ -15,7 +15,7 @@ const SupportManagerOpenTicket = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/support/openmanagerticket",
+        "https://server-kappa-ten-43.vercel.app/api/support/openmanagerticket",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -80,16 +80,16 @@ const SupportManagerOpenTicket = () => {
               <tbody>
                 {tickets.map((ticket) => (
                   <tr
-                    key={ticket.id}
+                    key={ticket._id}
                     style={{ fontSize: "12px" }}
                     onClick={() => handleRowClick(ticket.id)}
                   >
-                    <td>{ticket._id.slice(-5)}</td>
+                    <td>TCK{ticket.ticketId}</td>
                     <td style={getRowStyle(ticket.status)}>{ticket.status}</td>
                     <td>{ticket.description}</td>
                     <td>{ticket.manager}</td>
                     <td>{formatDate(ticket.dateCreated)}</td>
-                    <td>{ticket.dateUpdated}</td>
+                    <td>{formatDate(ticket.dateUpdated)}</td>
                   </tr>
                 ))}
               </tbody>

@@ -4,7 +4,6 @@ import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 
 const SupportAdminDashboard = () => {
-
   return (
     <>
       <SupportAdminNav />

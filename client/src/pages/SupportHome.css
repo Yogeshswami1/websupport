@@ -1,5 +1,9 @@
+/* Import fonts at the very top */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap");
+
+/* Your styles follow here */
 .mainHome {
-  background-image: url("../assets/images/supportHome.jpg");
+  background-image: url("../assets/images/saumicSupport.jpg");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -17,6 +21,7 @@
 .mainHome > div > h1 {
   font-weight: 800;
   font-size: xxx-large;
+  font-family: "Montserrat", sans-serif;
 }
 
 .heroImg {
@@ -32,6 +37,13 @@
   height: 100%;
   width: 100%;
 }
+.buttonStyle {
+  background-color: "#5A51C1";
+  color: "White";
+  border-radius: "20px";
+  font-weight: "bold";
+  box-shadow: "0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)";
+}
 
 .heroTitle {
   height: 320px;
@@ -45,7 +57,7 @@
 }
 
 .heroTitle > button {
-  background-color: #353979;
+  background-color: rgb(90, 81, 193);
   border-radius: 20px;
   padding: 8px 16px;
   font-weight: bold;
@@ -55,7 +67,7 @@
 }
 
 .heroTitle > button:hover {
-  background-color: #2b316d;
+  background-color: rgb(90, 81, 193);
 }
 
 .video {
@@ -76,6 +88,7 @@
 .videoContent > h2 {
   font-weight: bold;
   font-size: xx-large;
+  font-family: "Montserrat", sans-serif;
 }
 
 .childVideo {
@@ -88,7 +101,7 @@
 .innerVideo {
   height: 300px;
   width: 30%;
-  border: 1px solid #353979;
+  border: 1px solid rgb(90, 81, 193);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,6 +111,60 @@
 
 .innerVideo:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.holidayContainer {
+  margin-top: 10px;
+}
+
+.holidayContent {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 150px;
+  flex-direction: column; /* For proper stacking of elements */
+  text-align: center;
+}
+
+/* For mobile screens */
+@media screen and (max-width: 768px) {
+  .holidayContent {
+    padding: 80px 20px; /* Reduce padding on smaller screens */
+    height: auto; /* Allow content to grow naturally */
+    margin-top: 120px;
+  }
+
+  .holidayItem {
+    font-size: 14px; /* Adjust font size for readability */
+  }
+
+  h2 {
+    font-size: 18px; /* Smaller heading for mobile */
+  }
+
+  p {
+    font-size: 14px; /* Smaller paragraph text for mobile */
+  }
+}
+
+/* For very small screens (e.g., under 576px) */
+@media screen and (max-width: 576px) {
+  .holidayContent {
+    padding: 50px 10px;
+  }
+
+  .holidayItem {
+    font-size: 12px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 12px;
+  }
 }
 
 /* Media Queries for Mobile Responsiveness */
@@ -144,13 +211,15 @@
 
   .heroTitle {
     width: 90%;
-    margin-top: 10px;
+    margin-top: 50px;
   }
 
   .heroTitle > h1 {
-    font-size: xx-large;
+    font-size: xx-large !important;
   }
-
+  .video {
+    padding-right: 20px;
+  }
   .videoContent > h2 {
     font-size: x-large;
   }
@@ -165,15 +234,14 @@
     width: 95%;
   }
 
-  .heroTitle > h1 {
-    font-size: large;
-  }
-
   .heroTitle > button {
     padding: 6px 12px;
   }
 
   .videoContent > h2 {
     font-size: large;
+  }
+  .heroTitle > h1 {
+    font-size: small;
   }
 }

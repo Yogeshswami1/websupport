@@ -7,6 +7,7 @@ import axios from "axios";
 import SupportNavbar from "../components/layout/SupportNavbar";
 import Loader from "../components/layout/Loader";
 import "./SupportUserDashboard.css";
+import SupportMngrNavbar from "../components/layout/SupportMngrNavbar";
 
 const SupportTicketDetails = () => {
   const history = useHistory();
@@ -27,7 +28,7 @@ const SupportTicketDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/support/ticketbyid/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/ticketbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -56,7 +57,7 @@ const SupportTicketDetails = () => {
     console.log("button data", id);
     try {
       await axios.put(
-        `http://localhost:5000/api/support/closeticket/${id}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/closeticket/${id}`,
 
         {
           headers: {
@@ -84,11 +85,30 @@ const SupportTicketDetails = () => {
   const name = localStorage.getItem("name");
   const role = localStorage.getItem("role");
 
+  const handleReplyAndCloseClick = async (values) => {
+    console.log("button clicked");
+    try {
+      await axios.put(
+        `https://server-kappa-ten-43.vercel.app/api/support/addcommentandclose/${ticketId}`,
+        { comment: values.comment, name, role },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      history.push(`/supportticketdetails/${ticketId}`);
+      getTicket();
+    } catch (error) {
+      console.error("Error in updating ticket:", error);
+    }
+  };
+
   const onFinish = async (values) => {
     console.log(values);
     try {
       await axios.put(
-        `http://localhost:5000/api/support/addComment/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/addComment/${ticketId}`,
         { comment: values.comment, name, role },
         {
           headers: {
@@ -101,7 +121,7 @@ const SupportTicketDetails = () => {
         "Success",
         "Comment added successfully."
       );
-      history.push(`/supportuserticketdetails/${ticketId}`);
+      history.push(`/supportticketdetails/${ticketId}`);
       getTicket();
     } catch (error) {
       console.error("Error updating ticket:", error);
@@ -115,9 +135,12 @@ const SupportTicketDetails = () => {
 
   return (
     <>
-      <SupportNavbar />
+      <SupportMngrNavbar />
       <div className="main">
-        <div style={{ marginRight: "150px" }} className="content">
+        <div
+          style={{ marginRight: "150px", marginLeft: "150px" }}
+          className="content"
+        >
           {loadingData ? (
             <Loader />
           ) : (
@@ -168,10 +191,24 @@ const SupportTicketDetails = () => {
                   <Form.Item>
                     <Button
                       type="primary"
+                      style={{ background: "blue", color: "white" }}
                       htmlType="submit"
                       className="btn btn-success offset-4 mb-3 mt-4"
                     >
                       Submit
+                    </Button>
+                    <Button
+                      onClick={handleReplyAndCloseClick}
+                      type="primary"
+                      style={{
+                        background: "black",
+                        color: "white",
+                        margin: "20px",
+                      }}
+                      htmlType="submit"
+                      className="btn btn-success offset-4 mb-3 mt-4"
+                    >
+                      Reply and close
                     </Button>
                   </Form.Item>
                 </Form>

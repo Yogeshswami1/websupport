@@ -29,7 +29,7 @@ const SupportUserTicketDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/support/ticketbyid/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/ticketbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -65,7 +65,7 @@ const SupportUserTicketDetails = () => {
     console.log(values);
     try {
       await axios.put(
-        `http://localhost:5000/api/support/addComment/${ticketId}`,
+        `https://server-kappa-ten-43.vercel.app/api/support/addComment/${ticketId}`,
         { comment: values.comment, name, role, email },
         {
           headers: {
@@ -120,6 +120,7 @@ const SupportUserTicketDetails = () => {
                   layout="vertical"
                   onFinish={onFinish}
                   className="needs-validation"
+                  style={{ paddingLeft: "20px" }}
                 >
                   <Form.Item
                     name="comment"

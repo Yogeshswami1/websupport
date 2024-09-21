@@ -14,7 +14,7 @@ const SupportUserOpenTicket = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/support/openticket",
+        "https://server-kappa-ten-43.vercel.app/api/support/openticket",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -40,13 +40,25 @@ const SupportUserOpenTicket = () => {
   const getRowStyle = (status) => {
     switch (status) {
       case "pending":
-        return { backgroundColor: "RGB(248,222,126)" };
-      case "open":
-        return { backgroundColor: "rgb(41,171,135)", color: "white" };
-      case "closed":
-        return { backgroundColor: "#F88379", color: "white" };
+        return { backgroundColor: "#F9FFEB", color: "#DAFF85" };
+      case "Open":
+        return {
+          backgroundColor: "rgb(203,234,205)",
+          color: "green",
+          fontWeight: "bold",
+        };
+      case "Closed":
+        return {
+          backgroundColor: "#E3E4DD",
+          color: "rgb(54, 51, 51)",
+          fontWeight: "bold",
+        };
       default:
-        return {};
+        return {
+          backgroundColor: "#FFD9D6",
+          color: "#FF7A70",
+          fontWeight: "bold",
+        };
     }
   };
 
@@ -78,15 +90,15 @@ const SupportUserOpenTicket = () => {
                 {tickets.map((ticket) => (
                   <tr
                     key={ticket.id}
-                    style={{ fontSize: "12px" }}
+                    style={{ fontSize: "12px", fontWeight: "bold" }}
                     onClick={() => handleRowClick(ticket.id)}
                   >
-                    <td>{ticket._id}</td>
+                    <td>TCK{ticket.ticketId}</td>
                     <td style={getRowStyle(ticket.status)}>{ticket.status}</td>
                     <td>{ticket.description}</td>
                     <td>{ticket.manager}</td>
                     <td>{formatDate(ticket.dateCreated)}</td>
-                    <td>{ticket.dateUpdated}</td>
+                    <td>{formatDate(ticket.dateUpdated)}</td>
                   </tr>
                 ))}
               </tbody>
