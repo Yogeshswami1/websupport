@@ -22,7 +22,6 @@ const BookUserAppointment = () => {
               justifyContent: "center",
               flexDirection: "column",
               paddingTop: "50px",
-              paddingRight: "50px",
             }}
           >
             <BookAppointment />
