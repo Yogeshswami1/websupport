@@ -1,0 +1,46 @@
+sudo nano /etc/nginx/sites-available/websupportbackend.saumiccraft.com
+
+server {
+    listen 80;
+    server_name websupportbackend.saumiccraft.com;
+
+    location / {
+        proxy_pass http://localhost:5000;  # Assuming your Node.js app is running on port 3000
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    error_log /var/log/nginx/websupportbackend.saumiccraft.com.error.log;
+    access_log /var/log/nginx/websupportbackend.saumiccraft.com.access.log;
+}
+
+
+sudo ln -s /etc/nginx/sites-available/websupportbackend.saumiccraft.com /etc/nginx/sites-enabled/
+
+
+
+
+sudo nano /etc/nginx/sites-available/websupport.saumiccraft.com
+
+server {
+    listen 80;
+    server_name websupport.saumiccraft.com; #  Replace it with your own domain 
+
+    root /var/www/html/websupport/client/build; # Replace with the path to your build directory
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    error_log /var/log/nginx/websupport.saumiccraft.com.error.log;
+    access_log /var/log/nginx/websupport.saumiccraft.com.access.log;
+}
+
+sudo ln -s /etc/nginx/sites-available/websupport.saumiccraft.com /etc/nginx/sites-enabled/
+
+sudo certbot --nginx -d websupport.saumiccraft.com -d websupportbackend.saumiccraft.com
+
