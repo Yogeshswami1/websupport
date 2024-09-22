@@ -48,7 +48,6 @@ Desktop.ini
 
 # Build output
 
-dist/
 
 # Temporary files
 *.tmp
