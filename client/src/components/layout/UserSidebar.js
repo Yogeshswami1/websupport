@@ -20,10 +20,12 @@ function UserSidebar({ color }) {
   const history = useHistory();
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
+  const apiUrl = process.env.REACT_APP_BACKEND_URL;
+
   const getPlatform = async () => {
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+        `${apiUrl}/api/support/get-platform`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -104,7 +106,7 @@ function UserSidebar({ color }) {
     };
     axios
       .post(
-        "https://server-kappa-ten-43.vercel.app/api/support/newticket",
+        `${apiUrl}/api/support/newticket`,
         formattedValues,
         {
           headers: { Authorization: localStorage.getItem("token") },

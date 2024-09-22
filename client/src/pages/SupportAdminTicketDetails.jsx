@@ -7,6 +7,7 @@ import axios from "axios";
 import SupportNavbar from "../components/layout/SupportNavbar";
 import Loader from "../components/layout/Loader";
 import "./SupportUserDashboard.css";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const { Option } = Select;
 
@@ -29,7 +30,7 @@ const SupportAdminTicketDetails = () => {
     console.log("button data", id);
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/closeticket/${id}`,
+        `${apiUrl}/api/support/closeticket/${id}`,
         {},
         {
           headers: {
@@ -57,7 +58,7 @@ const SupportAdminTicketDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `https://server-kappa-ten-43.vercel.app/api/support/ticketbyid/${ticketId}`,
+        `${apiUrl}/api/support/ticketbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -84,7 +85,7 @@ const SupportAdminTicketDetails = () => {
   const onFinish = async (values) => {
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/updateuserticket/${ticketId}`,
+        `${apiUrl}/api/support/updateuserticket/${ticketId}`,
         values,
         {
           headers: {

@@ -11,6 +11,7 @@ import HolidayNav from "../components/layout/HolidayNav.jsx";
 import { useHistory } from "react-router-dom";
 import { Modal, Form, Input, notification } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportHome = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const SupportHome = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://server-kappa-ten-43.vercel.app/api/support/holiday"
+          `${apiUrl}/api/support/holiday`
         );
         console.log("Holiday data:", response.data);
         setHolidays(response.data);
@@ -63,7 +64,7 @@ const SupportHome = () => {
     console.log("Form values:", values);
     try {
       const response = await axios.post(
-        "https://server-kappa-ten-43.vercel.app/api/support/user-login",
+        `${apiUrl}/api/support/user-login"`,
         values
       );
 

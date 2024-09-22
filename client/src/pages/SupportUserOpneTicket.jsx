@@ -5,6 +5,7 @@ import "./SupportUserDashboard.css";
 import axios from "axios";
 import Loader from "../components/layout/Loader";
 import UserLayout from "../components/layout/UserLayout";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportUserOpenTicket = () => {
   const [tickets, setTickets] = useState([]);
@@ -14,7 +15,7 @@ const SupportUserOpenTicket = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/openticket",
+        `${apiUrl}/api/support/openticket`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

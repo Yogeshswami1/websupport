@@ -15,6 +15,7 @@ import SupportMngrNavbar from "../components/layout/SupportMngrNavbar";
 import Loader from "../components/layout/Loader";
 import { Modal, Form, Input, Rate, notification, Radio } from "antd";
 import moment from "moment";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportManagerAppointments = () => {
   const history = useHistory();
@@ -39,7 +40,7 @@ const SupportManagerAppointments = () => {
     console.log("button data", id);
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/updateappointmentbyid/${id}`,
+        `${apiUrl}/api/support/updateappointmentbyid/${id}`,
         {},
         {
           headers: {
@@ -70,7 +71,7 @@ const SupportManagerAppointments = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getmanagerappointments",
+        `${apiUrl}/api/support/getmanagerappointments`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -140,7 +141,7 @@ const SupportManagerAppointments = () => {
     console.log(values);
     try {
       await axios.post(
-        `https://server-kappa-ten-43.vercel.app/api/support/reviewmanagerappointment/${selectedAppointment._id}`,
+        `${apiUrl}/api/support/reviewmanagerappointment/${selectedAppointment._id}`,
         values,
         {
           headers: {

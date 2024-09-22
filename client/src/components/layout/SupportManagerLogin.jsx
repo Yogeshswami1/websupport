@@ -3,6 +3,7 @@ import { Button, Modal, Form, Input, notification } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportManagerLogin = () => {
   const history = useHistory();
@@ -43,7 +44,7 @@ const SupportManagerLogin = () => {
     console.log("Form values:", values);
     axios
       .post(
-        "https://server-kappa-ten-43.vercel.app/api/support/managerlogin",
+        `${apiUrl}/api/support/managerlogin`,
         values
       )
       .then((response) => {

@@ -166,7 +166,7 @@ function App() {
             <Route exact path="/contact" component={Contact} />
             <Route exact path="/services" component={Services} />
 
-            <Redirect from="*" to="/dashboard" />
+            <Redirect from="*" to="/support" />
           </Main>
         </Switch>
       </Provider>

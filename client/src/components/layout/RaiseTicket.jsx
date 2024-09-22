@@ -3,6 +3,7 @@ import { Button, Modal, Form, Input, notification } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const RaiseTicket = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -52,7 +53,7 @@ const RaiseTicket = () => {
     console.log("Form values:", values);
     try {
       const response = await axios.post(
-        "https://server-kappa-ten-43.vercel.app/api/support/user-login",
+        `${apiUrl}/api/support/user-login`,
         values
       );
 

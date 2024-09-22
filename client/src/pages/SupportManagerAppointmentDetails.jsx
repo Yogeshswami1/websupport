@@ -7,6 +7,7 @@ import SupportNavbar from "../components/layout/SupportNavbar";
 import Loader from "../components/layout/Loader";
 import "./SupportUserDashboard.css";
 import SupportMngrNavbar from "../components/layout/SupportMngrNavbar";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportManagerAppointmentDetails = () => {
   const history = useHistory();
@@ -22,7 +23,7 @@ const SupportManagerAppointmentDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `https://server-kappa-ten-43.vercel.app/api/support/appointmentbyid/${ticketId}`,
+        `${apiUrl}/api/support/appointmentbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -51,7 +52,7 @@ const SupportManagerAppointmentDetails = () => {
   const handleAddComment = async () => {
     try {
       const response = await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/addmanagercomment/${ticketId}`,
+        `${apiUrl}/api/support/addmanagercomment/${ticketId}`,
         { comment },
         {
           headers: {

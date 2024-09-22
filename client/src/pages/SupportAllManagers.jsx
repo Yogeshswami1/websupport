@@ -6,6 +6,7 @@ import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
 import { useHistory } from "react-router-dom";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const { Meta } = Card;
 
@@ -19,7 +20,7 @@ const SupportAllmanager = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getallmanagers",
+        `${apiUrl}/api/support/getallmanagers`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

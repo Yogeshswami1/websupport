@@ -8,6 +8,7 @@ import SupportNavbar from "../components/layout/SupportNavbar";
 import Loader from "../components/layout/Loader";
 import "./SupportUserDashboard.css";
 import SupportMngrNavbar from "../components/layout/SupportMngrNavbar";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportTicketDetails = () => {
   const history = useHistory();
@@ -28,7 +29,7 @@ const SupportTicketDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `https://server-kappa-ten-43.vercel.app/api/support/ticketbyid/${ticketId}`,
+        `${apiUrl}/api/support/ticketbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -57,7 +58,7 @@ const SupportTicketDetails = () => {
     console.log("button data", id);
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/closeticket/${id}`,
+        `${apiUrl}/api/support/closeticket/${id}`,
 
         {
           headers: {
@@ -89,7 +90,7 @@ const SupportTicketDetails = () => {
     console.log("button clicked");
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/addcommentandclose/${ticketId}`,
+        `${apiUrl}/api/support/addcommentandclose/${ticketId}`,
         { comment: values.comment, name, role },
         {
           headers: {
@@ -108,7 +109,7 @@ const SupportTicketDetails = () => {
     console.log(values);
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/addComment/${ticketId}`,
+        `${apiUrl}/api/support/addComment/${ticketId}`,
         { comment: values.comment, name, role },
         {
           headers: {

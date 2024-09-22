@@ -9,6 +9,7 @@ import { Modal, Form, Input, Select, notification } from "antd";
 import axios from "axios";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 const { Option } = Select;
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const DashboardButton = ({ userData }) => {
   const [ticketData, setTicketData] = useState(null);
@@ -18,7 +19,7 @@ const DashboardButton = ({ userData }) => {
     console.log(userId);
     try {
       const response = await axios.post(
-        "https://server-kappa-ten-43.vercel.app/api/support/dashboard",
+        `${apiUrl}/api/support/dashboard`,
         {
           userId: userId,
         }

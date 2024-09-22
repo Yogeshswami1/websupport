@@ -6,7 +6,7 @@
 //   Row,
 //   Col,
 //   Card,
-//   Table,
+//   Table, 
 //   message,
 //   Button,
 //   Modal,

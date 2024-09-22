@@ -6,6 +6,7 @@ import axios from "axios";
 import Loader from "../components/layout/Loader";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Form, Select, Input } from "antd";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const { Option } = Select;
 
@@ -21,7 +22,7 @@ const SupportManagerDash = () => {
     const name = localStorage.getItem("name");
     try {
       const response = await axios.get(
-        `https://server-kappa-ten-43.vercel.app/api/support/getmanagerticket?name=${encodeURIComponent(
+        `${apiUrl}/api/support/getmanagerticket?name=${encodeURIComponent(
           name
         )}`,
         {

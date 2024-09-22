@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const BookAppointmentForm = () => {
   dayjs.extend(customParseFormat);
@@ -65,7 +66,7 @@ const BookAppointmentForm = () => {
 
     axios
       .post(
-        "https://server-kappa-ten-43.vercel.app/api/support/appointmentRoute",
+        `${apiUrl}/api/support/appointmentRoute`,
         formattedValues,
         {
           headers: { Authorization: localStorage.getItem("token") },

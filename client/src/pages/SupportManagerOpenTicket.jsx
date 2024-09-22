@@ -4,6 +4,7 @@ import SupportMngrNavbar from "../components/layout/SupportMngrNavbar";
 import SupportManagerMenu from "../components/layout/SupportManagerMenu";
 import axios from "axios";
 import Loader from "../components/layout/Loader";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportManagerOpenTicket = () => {
   const [tickets, setTickets] = useState([]);
@@ -15,7 +16,7 @@ const SupportManagerOpenTicket = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/openmanagerticket",
+        `${apiUrl}/api/support/openmanagerticket`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

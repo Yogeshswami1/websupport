@@ -16,6 +16,7 @@ import { Form, Input, Modal, Rate, notification, Radio } from "antd";
 import Loader from "../components/layout/Loader";
 import moment from "moment";
 import UserLayout from "../components/layout/UserLayout";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportUserAppointment = () => {
   const history = useHistory();
@@ -34,7 +35,7 @@ const SupportUserAppointment = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getappointments",
+        `${apiUrl}/api/support/getappointments`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -116,7 +117,7 @@ const SupportUserAppointment = () => {
     console.log(values);
     try {
       await axios.post(
-        `https://server-kappa-ten-43.vercel.app/api/support/reviewappointment/${selectedAppointment._id}`,
+        `${apiUrl}/api/support/reviewappointment/${selectedAppointment._id}`,
         values,
         {
           headers: {

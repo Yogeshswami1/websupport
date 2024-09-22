@@ -9,6 +9,7 @@ import axios from "axios";
 import { Form, Select, Input } from "antd";
 import UserLayout from "../components/layout/UserLayout";
 import { colors } from "@mui/material";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const { Option } = Select;
 
@@ -23,7 +24,7 @@ const SupportUserDash = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getticket",
+        `${apiUrl}/api/support/getticket`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

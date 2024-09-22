@@ -14,6 +14,7 @@ import Loader from "../components/layout/Loader";
 import { notification, Input, Form, Radio } from "antd";
 import moment from "moment";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportAdminAppointment = () => {
   const history = useHistory();
@@ -38,7 +39,7 @@ const SupportAdminAppointment = () => {
     console.log("button data", id);
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/updateappointmentbyid/${id}`,
+        `${apiUrl}/api/support/updateappointmentbyid/${id}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -65,7 +66,7 @@ const SupportAdminAppointment = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getallappointments",
+        `${apiUrl}/api/support/getallappointments`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

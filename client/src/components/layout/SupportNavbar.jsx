@@ -7,6 +7,7 @@ import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import RaiseTicket from "./RaiseTicket";
 import MenuIcon from "@mui/icons-material/Menu";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportNavbar = ({
   onPress,
@@ -40,7 +41,7 @@ const SupportNavbar = ({
   const handleButtonClick = async () => {
     try {
       const res = await axios.post(
-        "https://server-kappa-ten-43.vercel.app/api/support/click",
+        `${apiUrl}/api/support/click`,
         {
           userId: id,
         }

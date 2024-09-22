@@ -9,6 +9,7 @@ import SupportNavbar from "../components/layout/SupportNavbar";
 import Loader from "../components/layout/Loader";
 import "./SupportUserDashboard.css";
 import UserLayout from "../components/layout/UserLayout";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportUserTicketDetails = () => {
   const history = useHistory();
@@ -29,7 +30,7 @@ const SupportUserTicketDetails = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        `https://server-kappa-ten-43.vercel.app/api/support/ticketbyid/${ticketId}`,
+        `${apiUrl}/api/support/ticketbyid/${ticketId}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -65,7 +66,7 @@ const SupportUserTicketDetails = () => {
     console.log(values);
     try {
       await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/addComment/${ticketId}`,
+        `${apiUrl}/api/support/addComment/${ticketId}`,
         { comment: values.comment, name, role, email },
         {
           headers: {

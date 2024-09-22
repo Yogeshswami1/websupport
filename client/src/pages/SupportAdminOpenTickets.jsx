@@ -5,6 +5,7 @@ import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportAdminOpenTickets = () => {
   const history = useHistory();
@@ -17,7 +18,7 @@ const SupportAdminOpenTickets = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getallopenticket",
+        `${apiUrl}/api/support/getallopenticket`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

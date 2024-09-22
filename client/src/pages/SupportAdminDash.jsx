@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Form, Select, Input } from "antd";
 
 const { Option } = Select;
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportAdminDash = () => {
   const history = useHistory();
@@ -25,7 +26,7 @@ const SupportAdminDash = () => {
     setLoadingData(true);
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getallticket",
+        `${apiUrl}/api/support/getallticket`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),

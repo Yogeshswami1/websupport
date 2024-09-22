@@ -6,6 +6,7 @@ import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
 import { Button } from "@mui/material";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const { Option } = Select;
 
@@ -29,7 +30,7 @@ const SupportManagerDetails = () => {
     const fetchManagerDetails = async () => {
       try {
         const response = await axios.get(
-          `https://server-kappa-ten-43.vercel.app/api/support/getmanager/${id}`,
+          `${apiUrl}/api/support/getmanager/${id}`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -47,7 +48,7 @@ const SupportManagerDetails = () => {
     const getPlatform = async () => {
       try {
         const response = await axios.get(
-          "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+          `${apiUrl}/api/support/get-platform`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),

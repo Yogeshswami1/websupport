@@ -10,6 +10,7 @@ import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 const { Option } = Select;
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportUserDashboardMenu = () => {
   const history = useHistory();
@@ -75,7 +76,7 @@ const SupportUserDashboardMenu = () => {
     };
     axios
       .post(
-        "https://server-kappa-ten-43.vercel.app/api/support/newticket",
+        `${apiUrl}/api/support/newticket`,
         formattedValues,
         {
           headers: { Authorization: localStorage.getItem("token") },

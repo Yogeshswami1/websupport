@@ -9,6 +9,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { Form, Input, Modal, notification, Select } from "antd";
 import axios from "axios";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const { Item } = Form;
 
@@ -21,7 +22,7 @@ const SupportManagerMenu = ({ managerData }) => {
     const getPlatform = async () => {
       try {
         const response = await axios.get(
-          "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+          `${apiUrl}/api/support/get-platform`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -87,7 +88,7 @@ const SupportManagerMenu = ({ managerData }) => {
       .then((values) => {
         axios
           .post(
-            "https://server-kappa-ten-43.vercel.app/api/support/create-user",
+            `${apiUrl}/api/support/create-user`,
             values
           )
           .then((response) => {

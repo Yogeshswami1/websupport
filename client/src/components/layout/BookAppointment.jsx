@@ -28,6 +28,7 @@ import { useState } from "react";
 dayjs.extend(customParseFormat);
 
 const steps = ["Details", "Services", "Time and date"];
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const timeSlots = [
   "10:05",
@@ -77,7 +78,7 @@ export default function BookAppointment() {
   const getPlatform = async () => {
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+        `${apiUrl}/api/support/get-platform`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -125,7 +126,7 @@ export default function BookAppointment() {
 
     axios
       .post(
-        "https://server-kappa-ten-43.vercel.app/api/support/appointmentRoute",
+        `${apiUrl}/api/support/appointmentRoute`,
         formattedValues,
         {
           headers: { Authorization: localStorage.getItem("token") },
@@ -156,7 +157,7 @@ export default function BookAppointment() {
   const getAppointments = async () => {
     try {
       const response = await axios.get(
-        "https://server-kappa-ten-43.vercel.app/api/support/getappointments",
+        `${apiUrl}/api/support/getappointments`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -348,7 +349,7 @@ export default function BookAppointment() {
     console.log("Form Data:", formData);
     try {
       const response = await axios.post(
-        "https://server-kappa-ten-43.vercel.app/api/support/appointmentRoute",
+        `${apiUrl}/api/support/appointmentRoute`,
         formData
       );
       console.log("Appointment booked successfully", response.data);

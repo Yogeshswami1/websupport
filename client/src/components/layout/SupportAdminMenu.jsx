@@ -10,6 +10,7 @@ import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import CancelScheduleSendIcon from "@mui/icons-material/CancelScheduleSend";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -26,7 +27,7 @@ const SupportAdminMenu = () => {
     const getPlatform = async () => {
       try {
         const response = await axios.get(
-          "https://server-kappa-ten-43.vercel.app/api/support/get-platform",
+          `${apiUrl}/api/support/get-platform`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -97,7 +98,7 @@ const SupportAdminMenu = () => {
       .then((values) => {
         axios
           .post(
-            "https://server-kappa-ten-43.vercel.app/api/support/create-manager",
+            `${apiUrl}/api/support/create-manager`,
             values
           )
           .then((response) => {
@@ -127,7 +128,7 @@ const SupportAdminMenu = () => {
       .then((values) => {
         axios
           .post(
-            "https://server-kappa-ten-43.vercel.app/api/support/make-holiday",
+            `${apiUrl}/api/support/make-holiday`,
             values
           )
           .then((response) => {
@@ -157,7 +158,7 @@ const SupportAdminMenu = () => {
       .then((values) => {
         axios
           .post(
-            "https://server-kappa-ten-43.vercel.app/api/support/add-platform",
+            `${apiUrl}/api/support/add-platform`,
             values
           ) // Adjust the endpoint as necessary
           .then((response) => {
@@ -183,7 +184,7 @@ const SupportAdminMenu = () => {
 
   const handleCancelHolidayClick = () => {
     axios
-      .post("https://server-kappa-ten-43.vercel.app/api/support/end-holiday")
+      .post(`${apiUrl}/api/support/end-holiday`)
       .then((response) => {
         openNotificationWithIcon(
           "success",
