@@ -47,7 +47,7 @@ Desktop.ini
 *~
 
 # Build output
-build/
+
 dist/
 
 # Temporary files
