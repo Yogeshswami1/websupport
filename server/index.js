@@ -70,6 +70,8 @@ const app = express();
 
 // Define CORS options
 const corsOptions = {
+  // origin: 'http://localhost:3001', // specify allowed origin (replace with actual URL)
+
   origin: 'https://websupport.saumiccraft.com', // specify allowed origin (replace with actual URL)
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // specify allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // specify allowed headers
