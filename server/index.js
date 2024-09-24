@@ -51,7 +51,6 @@
 //     console.log("Error connecting to MongoDB:", error.message);
 //   });
 
-
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -70,11 +69,11 @@ const app = express();
 
 // Define CORS options
 const corsOptions = {
-  // origin: 'http://localhost:3001', // specify allowed origin (replace with actual URL)
+  // origin: "http://localhost:3000", // specify allowed origin (replace with actual URL)
 
   origin: 'https://websupport.saumiccraft.com', // specify allowed origin (replace with actual URL)
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // specify allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // specify allowed headers
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // specify allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // specify allowed headers
   credentials: true, // allow credentials
 };
 
@@ -102,6 +101,7 @@ app.get("/data", middleware, async (req, res) => {
 });
 
 app.use("/api/support", supportRoutes);
+
 
 mongoose
   .connect(process.env.MONGO_URI)

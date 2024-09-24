@@ -5,7 +5,7 @@ const { Schema, model } = mongoose;
 const managerSchema = new Schema({
   name: {
     type: String,
-    default: "",
+    required: true,
   },
   date: {
     type: Date,
@@ -19,7 +19,17 @@ const platformSchema = new Schema(
       type: String,
       required: true,
     },
-    managers: [managerSchema],
+    managers: {
+      type: [managerSchema],
+      validate: {
+        validator: function (managers) {
+          // Check for unique manager names within the managers array
+          const managerNames = managers.map((manager) => manager.name);
+          return managerNames.length === new Set(managerNames).size;
+        },
+        message: "Manager names must be unique within the platform.",
+      },
+    },
   },
   { timestamps: true }
 );

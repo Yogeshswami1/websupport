@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.d5f63940.css",
-    "main.js": "/static/js/main.1bfd84cc.js",
+    "main.js": "/static/js/main.d39321b4.js",
     "static/media/home-decor-3.jpeg": "/static/media/home-decor-3.74d13fcbd3c631fc7908.jpeg",
     "static/media/home-decor-2.jpeg": "/static/media/home-decor-2.b4e5397c9846645ba275.jpeg",
     "static/media/home-decor-1.jpeg": "/static/media/home-decor-1.05e218fd495ccc65c99d.jpeg",
@@ -36,10 +36,10 @@
     "static/media/logos-facebook.svg": "/static/media/logos-facebook.636d99abf08b3f56f5fa13748601c668.svg",
     "static/media/pencil.svg": "/static/media/pencil.177258577d59e301b13eb12fe99a2223.svg",
     "main.d5f63940.css.map": "/static/css/main.d5f63940.css.map",
-    "main.1bfd84cc.js.map": "/static/js/main.1bfd84cc.js.map"
+    "main.d39321b4.js.map": "/static/js/main.d39321b4.js.map"
   },
   "entrypoints": [
     "static/css/main.d5f63940.css",
-    "static/js/main.1bfd84cc.js"
+    "static/js/main.d39321b4.js"
   ]
 }

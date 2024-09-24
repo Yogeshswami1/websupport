@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Card, Modal, Select, notification } from "antd";
+import { Card, Modal, Select, notification, Input, Form } from "antd";
 import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
 import { Button } from "@mui/material";
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
+
 
 const { Option } = Select;
 
@@ -15,8 +16,16 @@ const SupportManagerDetails = () => {
   const [manager, setManager] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // New state for edit modal
   const [platforms, setPlatforms] = useState([]);
   const [selectedPlatform, setSelectedPlatform] = useState(null);
+
+  // State for editing form fields
+  const [editForm, setEditForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const openNotificationWithIcon = (type, message, description) => {
     notification[type]({
@@ -38,6 +47,8 @@ const SupportManagerDetails = () => {
           }
         );
         setManager(response.data);
+        // Initialize edit form with fetched data
+        setEditForm({ name: response.data.name, email: response.data.email });
       } catch (error) {
         console.error("Error fetching manager details:", error);
       } finally {
@@ -47,14 +58,11 @@ const SupportManagerDetails = () => {
 
     const getPlatform = async () => {
       try {
-        const response = await axios.get(
-          `${apiUrl}/api/support/get-platform`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
+        const response = await axios.get(`${apiUrl}/api/support/get-platform`, {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        });
         setPlatforms(response.data);
       } catch (err) {
         console.log("Error fetching platforms:", err);
@@ -72,7 +80,7 @@ const SupportManagerDetails = () => {
   const handleOk = async () => {
     try {
       const response = await axios.put(
-        `https://server-kappa-ten-43.vercel.app/api/support/assign-platform/${id}`,
+        `${apiUrl}/api/support/assign-platform/${id}`,
         { platform: selectedPlatform },
         {
           headers: {
@@ -83,7 +91,6 @@ const SupportManagerDetails = () => {
 
       console.log("Platform assigned successfully:", response.data);
 
-      // Display success notification
       openNotificationWithIcon(
         "success",
         "Success",
@@ -94,11 +101,10 @@ const SupportManagerDetails = () => {
     } catch (error) {
       console.error("Error assigning platform:", error);
 
-      // Display error notification
       openNotificationWithIcon(
         "error",
         "Error",
-        "Failed to assign platform. Please try again."
+        "Manager Already exist. Please try again."
       );
     }
   };
@@ -109,6 +115,58 @@ const SupportManagerDetails = () => {
 
   const handlePlatformChange = (value) => {
     setSelectedPlatform(value);
+  };
+
+  // Function to show the edit modal
+  const showEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  // Function to handle form field changes in the edit modal
+  const handleEditFormChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  // Function to handle submitting the updated manager details
+  const handleEditSubmit = async () => {
+    try {
+      const response = await axios.put(
+        `${apiUrl}/api/support/update-manager/${id}`,
+        editForm,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      openNotificationWithIcon(
+        "success",
+        "Success",
+        "Manager details updated successfully."
+      );
+
+      setIsEditModalOpen(false);
+
+      // Update manager state with new details
+      setManager(response.data);
+    } catch (error) {
+      console.error("Error updating manager details:", error);
+
+      openNotificationWithIcon(
+        "error",
+        "Error",
+        "There was an error updating the manager details. Please try again."
+      );
+    }
+  };
+
+  const handleEditCancel = () => {
+    setIsEditModalOpen(false);
   };
 
   return (
@@ -139,6 +197,13 @@ const SupportManagerDetails = () => {
               <Button variant="contained" onClick={showModal}>
                 Update Platform
               </Button>
+              <Button
+                sx={{ marginLeft: "30px" }}
+                variant="contained"
+                onClick={showEditModal} // Show edit modal on click
+              >
+                Edit
+              </Button>
             </Card>
           ) : (
             <div
@@ -155,6 +220,7 @@ const SupportManagerDetails = () => {
         </div>
       </div>
 
+      {/* Platform Modal */}
       <Modal
         title="Assign Platform"
         open={isModalOpen}
@@ -174,6 +240,41 @@ const SupportManagerDetails = () => {
             </Option>
           ))}
         </Select>
+      </Modal>
+
+      {/* Edit Manager Modal */}
+      <Modal
+        title="Edit Manager Details"
+        open={isEditModalOpen}
+        onOk={handleEditSubmit} // Handle submit
+        onCancel={handleEditCancel}
+        okText="Save"
+        cancelText="Cancel"
+      >
+        <Form layout="vertical">
+          <Form.Item label="Name">
+            <Input
+              name="name"
+              value={editForm.name}
+              onChange={handleEditFormChange}
+            />
+          </Form.Item>
+          <Form.Item label="Email">
+            <Input
+              name="email"
+              value={editForm.email}
+              onChange={handleEditFormChange}
+            />
+          </Form.Item>
+          <Form.Item label="Password">
+            <Input.Password
+              name="password"
+              value={editForm.password}
+              onChange={handleEditFormChange}
+              placeholder="Enter new password"
+            />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );

@@ -37,6 +37,7 @@ import { handleButtonClick } from "../controllers/clickController.js";
 import { addPlatform } from "../controllers/addPlatform.js";
 import { getPlatform } from "../controllers/getPlatform.js";
 import { assignPlatform } from "../controllers/assignPlatform.js";
+import { updateManager } from "../controllers/updateManager.js";
 
 const router = express.Router();
 
@@ -91,6 +92,7 @@ router.put("/addcommentandclose/:id", addCommentAndClose);
 router.put("/addComment/:id", addComment);
 
 router.get("/appointmentbyid/:id", getAppointmentsDetails);
+router.put("/update-manager/:id", updateManager);
 
 export default router;
 
