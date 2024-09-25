@@ -20,6 +20,7 @@ const SupportAdminAppointment = () => {
   const history = useHistory();
   const [appointments, setAppointments] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
+  const [managers, setManagers] = useState([]);
   const [dateFilterOption, setDateFilterOption] = useState("all");
   const [statusFilterOption, setStatusFilterOption] = useState("all");
   const [filterId, setFilterId] = useState("");
@@ -38,14 +39,11 @@ const SupportAdminAppointment = () => {
   const handleButtonClick = async (id) => {
     console.log("button data", id);
     try {
-      await axios.put(
-        `${apiUrl}/api/support/updateappointmentbyid/${id}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      await axios.put(`${apiUrl}/api/support/updateappointmentbyid/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
       openNotificationWithIcon(
         "success",
         "Success",
@@ -59,6 +57,23 @@ const SupportAdminAppointment = () => {
         "Login Fail",
         "Could not update appointment, try again."
       );
+    }
+  };
+
+  const getManagers = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/support/getallmanagers`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      if (Array.isArray(response.data)) {
+        setManagers(response.data);
+      } else {
+        console.error("Error: API response is not an array", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching managers:", error);
     }
   };
 
@@ -90,6 +105,7 @@ const SupportAdminAppointment = () => {
 
   useEffect(() => {
     getAppointments();
+    getManagers();
   }, []);
 
   const formatDate = (dateString) => {
@@ -125,13 +141,6 @@ const SupportAdminAppointment = () => {
   const handleRowClick = (id) => {
     console.log(id);
     history.push(`/supportappointmentdetails/${id}`);
-  };
-
-  const handleDateFilterOptionChange = (event) => {
-    setDateFilterOption(event.target.value);
-  };
-  const handleFilterOptionChange = (event) => {
-    setDateFilterOption(event.target.value);
   };
 
   const handleStatusFilterOptionChange = (event) => {
@@ -191,13 +200,10 @@ const SupportAdminAppointment = () => {
     return filteredAppointments;
   };
 
-  const handleFilterChange = (e) => {
-    setFilterId(e.target.value);
-  };
-
   const filteredAppointments = filterId
-    ? appointments.filter((appointment) =>
-        appointment.appointmentId.toString().includes(filterId)
+    ? appointments.filter(
+        (appointment) =>
+          appointment.manager && appointment.manager.includes(filterId)
       )
     : filterAppointments(
         appointments,
@@ -229,12 +235,21 @@ const SupportAdminAppointment = () => {
           }}
         >
           <Form layout="inline">
-            <Form.Item label="Filter" className="custom-form-item">
-              <Input
-                placeholder="Enter appointment id"
-                value={filterId}
-                onChange={handleFilterChange}
-              />
+            <Form.Item label="Filter by Manager" className="custom-form-item">
+              <FormControl variant="outlined" size="small">
+                <Select
+                  value={filterId}
+                  onChange={(e) => setFilterId(e.target.value)}
+                  label="Manager Filter"
+                >
+                  <MenuItem value="">All</MenuItem>
+                  {managers.map((manager) => (
+                    <MenuItem key={manager._id} value={manager.name}>
+                      {manager.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Form.Item>
 
             <Form.Item label="Filter by Status" className="custom-form-item">

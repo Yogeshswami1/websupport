@@ -77,14 +77,11 @@ export default function BookAppointment() {
 
   const getPlatform = async () => {
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/support/get-platform`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      const response = await axios.get(`${apiUrl}/api/support/get-platform`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
       setPlatforms(response.data);
     } catch (err) {
       console.log("Error fetching platforms:", err);
@@ -125,13 +122,9 @@ export default function BookAppointment() {
     };
 
     axios
-      .post(
-        `${apiUrl}/api/support/appointmentRoute`,
-        formattedValues,
-        {
-          headers: { Authorization: localStorage.getItem("token") },
-        }
-      )
+      .post(`${apiUrl}/api/support/appointmentRoute`, formattedValues, {
+        headers: { Authorization: localStorage.getItem("token") },
+      })
       .then((response) => {
         console.log(response.data);
         setIsModalVisible(false);
@@ -378,7 +371,14 @@ export default function BookAppointment() {
               marginTop: "20px",
             }}
           >
-            <Form form={form} layout="vertical" onFinish={handleFinish}>
+            <Form
+              initialValues={{
+                email: localStorage.getItem("email") || "", // Fetch email from localStorage
+              }}
+              form={form}
+              layout="vertical"
+              onFinish={handleFinish}
+            >
               <Row gutter={[16, 16]}>
                 {" "}
                 <Col xs={24} md={24}>
@@ -408,6 +408,7 @@ export default function BookAppointment() {
                   <Form.Item
                     name="email"
                     label="Email"
+                    value={localStorage.getItem("email")}
                     rules={[
                       { required: true, message: "Please enter your email" },
                     ]}
