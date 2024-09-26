@@ -106,7 +106,7 @@ const SupportManagerMenu = ({ managerData }) => {
             openNotificationWithIcon(
               "error",
               "Failed",
-              "There is an problem creating new user. Please try again."
+              "Username already exists."
             );
           });
       })
