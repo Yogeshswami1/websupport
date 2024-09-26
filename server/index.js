@@ -18,7 +18,7 @@
 // app.use(bodyParser.json());
 
 // app.use("/test", middleware, (req, res) => {
-//
+//   
 // });
 // app.use("/api/managers", managerRoutes);
 // app.use("/api/users", userRoutes);
@@ -41,14 +41,14 @@
 //   .connect(process.env.MONGO_URI)
 
 //   .then(() => {
-//
+//     
 
 //     app.listen(PORT, () => {
-//
+//       
 //     });
 //   })
 //   .catch((error) => {
-//
+//     
 //   });
 
 import express from "express";
@@ -81,7 +81,9 @@ app.use(cors(corsOptions)); // Apply CORS middleware with options
 app.use(express.json());
 app.use(bodyParser.json());
 
-app.use("/test", middleware, (req, res) => {});
+app.use("/test", middleware, (req, res) => {
+  
+});
 app.use("/api/managers", managerRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/contact", contactRoutes);
@@ -100,9 +102,16 @@ app.get("/data", middleware, async (req, res) => {
 
 app.use("/api/support", supportRoutes);
 
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    app.listen(PORT, () => {});
+    
+
+    app.listen(PORT, () => {
+      
+    });
   })
-  .catch((error) => {});
+  .catch((error) => {
+    
+  });
