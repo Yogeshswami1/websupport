@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SupportNavbar from "../components/layout/SupportNavbar.jsx";
 import "./SupportHome.css";
-import BookAppointmentForm from "../components/BookAppointmentForm.jsx";
 import SupportFooter from "../components/layout/SupportFooter.jsx";
-import { getUser } from "../redux/userSlice.jsx";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -11,6 +9,7 @@ import HolidayNav from "../components/layout/HolidayNav.jsx";
 import { useHistory } from "react-router-dom";
 import { Modal, Form, Input, notification } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportHome = () => {
@@ -29,21 +28,21 @@ const SupportHome = () => {
       "0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   };
 
+  // Fetch holidays from backend
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchHolidays = async () => {
       try {
-        const response = await axios.get(
-          `${apiUrl}/api/support/holiday`
-        );
+        const response = await axios.get(`${apiUrl}/api/support/holiday`);
         console.log("Holiday data:", response.data);
         setHolidays(response.data);
       } catch (err) {
         console.log("Error fetching holiday data:", err);
       }
     };
-    fetchData();
+    fetchHolidays();
   }, []);
 
+  // Notification helper
   const openNotificationWithIcon = (type, message, description) => {
     notification[type]({
       message,
@@ -67,7 +66,6 @@ const SupportHome = () => {
         `${apiUrl}/api/support/user-login`,
         values
       );
-
       setIsModalVisible(false);
       form.resetFields();
       openNotificationWithIcon(
@@ -102,38 +100,62 @@ const SupportHome = () => {
     }
   };
 
+  // Helper to check if today is a holiday or weekend (Saturday/Sunday)
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 for Sunday, 6 for Saturday
+  const formattedToday = today.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+
+  const isHolidayToday = holidays.some(
+    (holiday) =>
+      new Date(holiday.date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }) === formattedToday
+  );
+
+  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // Check if today is Saturday or Sunday
+
   return (
     <>
-      {holidays.length > 0 ? (
+      {isHolidayToday || isWeekend ? (
         <div className="holidayContainer">
           <HolidayNav />
           <div className="holidayContent">
-            {holidays.map((holiday, index) => (
-              <div key={index} className="holidayItem">
-                <h2>Dear Valued User,</h2>
-                <p>
-                  We regret to inform you that the support portal is currently
-                  closed due to <strong>{holiday.message}</strong>.
-                </p>
-                <p>
-                  Please note that the portal will reopen on{" "}
-                  <strong>
-                    {new Date(holiday.date).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
-                  </strong>
-                  . During this time, you will not be able to access support
-                  services through the portal. We apologize for any
-                  inconvenience this may cause and appreciate your understanding
-                  and patience.
-                </p>
-                <p>Thank you for your cooperation.</p>
-                <p>Sincerely,</p>
-                <strong>Saumic craft Support Team</strong>
-              </div>
-            ))}
+            <div className="holidayItem">
+              <h2>Dear Valued User,</h2>
+              <p>
+                We regret to inform you that the support portal is currently
+                closed due to{" "}
+                {isHolidayToday ? (
+                  holidays
+                    .filter(
+                      (holiday) =>
+                        new Date(holiday.date).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }) === formattedToday
+                    )
+                    .map((holiday) => <strong>{holiday.message}</strong>)
+                ) : (
+                  <strong>{dayOfWeek === 6 ? "Saturday" : "Sunday"}</strong>
+                )}
+                .
+              </p>
+              <p>
+                {isHolidayToday
+                  ? "Please note that the portal will reopen after the holiday."
+                  : "Please note that the portal will reopen on the next business day."}
+              </p>
+              <p>Thank you for your cooperation.</p>
+              <p>Sincerely,</p>
+              <strong>Saumic Craft Support Team</strong>
+            </div>
           </div>
           <SupportFooter />
         </div>
@@ -183,6 +205,7 @@ const SupportHome = () => {
         </>
       )}
 
+      {/* Login Modal */}
       <Modal
         title="Login"
         visible={isModalVisible}

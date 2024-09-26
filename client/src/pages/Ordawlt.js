@@ -1,9 +1,9 @@
-import React from 'react'
+// import React from 'react'
 
-const Ordawlt = () => {
-  return (
-    <div>Ordawlt</div>
-  )
-}
+// const Ordawlt = () => {
+//   return (
+//     <div>Ordawlt</div>
+//   )
+// }
 
-export default Ordawlt
+// export default Ordawlt

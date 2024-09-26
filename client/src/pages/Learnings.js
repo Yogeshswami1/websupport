@@ -1,9 +1,9 @@
-import React from 'react'
+// import React from 'react'
 
-const Learnings = () => {
-  return (
-    <div>Learnings</div>
-  )
-}
+// const Learnings = () => {
+//   return (
+//     <div>Learnings</div>
+//   )
+// }
 
-export default Learnings
+// export default Learnings

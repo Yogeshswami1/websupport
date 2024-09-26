@@ -4,7 +4,6 @@ export const getTicket = async (req, res) => {
   try {
     const { id } = req.user;
     const allTickets = await Ticket.find({ userId: id });
-    console.log(allTickets);
     res.status(200).json(allTickets);
   } catch (e) {
     console.error(e);

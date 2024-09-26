@@ -35,6 +35,7 @@ const SupportUserDash = () => {
         (a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)
       );
       setTickets(sortedTickets);
+      getTicket();
     } catch (error) {
       console.error("Error fetching tickets:", error);
     }

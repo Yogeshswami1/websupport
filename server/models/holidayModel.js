@@ -6,6 +6,10 @@ const holidaySchema = new Schema({
     type: Date,
     required: true,
   },
+  toDate: {
+    type: Date,
+    required: true,
+  },
   message:{
     type:String,
     required:true,

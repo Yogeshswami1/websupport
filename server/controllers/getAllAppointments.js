@@ -2,6 +2,7 @@ import Appointment from "../models/appointmentModel.js";
 
 export const getAllAppointment = async (req, res) => {
   try {
+    console.log("kya baat hai");
     const allAppointments = await Appointment.find({});
     console.log(allAppointments);
     res.status(200).json(allAppointments);

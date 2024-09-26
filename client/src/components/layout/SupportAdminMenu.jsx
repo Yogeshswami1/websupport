@@ -77,13 +77,13 @@ const SupportAdminMenu = () => {
   };
 
   const showPlatformModal = () => {
-    setIsPlatformModalVisible(true); // Show platform modal
+    setIsPlatformModalVisible(true);
   };
 
   const handleCancel = () => {
     setIsManagerModalVisible(false);
     setIsHolidayModalVisible(false);
-    setIsPlatformModalVisible(false); // Hide platform modal
+    setIsPlatformModalVisible(false);
     form.resetFields();
   };
 
@@ -163,7 +163,7 @@ const SupportAdminMenu = () => {
           .post(
             `${apiUrl}/api/support/add-platform`,
             values
-          ) // Adjust the endpoint as necessary
+          )
           .then((response) => {
             handleCancel();
             openNotificationWithIcon(
@@ -218,7 +218,7 @@ const SupportAdminMenu = () => {
         textAlign: "center",
         position: "relative",
         height: "calc(100vh - 80px)", // Adjust height as needed
-        overflowY: "auto", // Enable vertical scrolling
+        overflowY: "auto",
       }}
     >
       <h1
@@ -497,7 +497,19 @@ const SupportAdminMenu = () => {
         <Form form={form} layout="vertical" name="holiday_form">
           <Item
             name="date"
-            label="Holiday Date"
+            label="From"
+            rules={[
+              {
+                required: true,
+                message: "Please select the date!",
+              },
+            ]}
+          >
+            <DatePicker />
+          </Item>
+          <Item
+            name="toDate"
+            label="To"
             rules={[
               {
                 required: true,

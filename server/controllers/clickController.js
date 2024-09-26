@@ -4,10 +4,7 @@ export const handleButtonClick = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    // Calculate the timestamp for 24 hours ago
-    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-
-    // Find clicks within the last 24 hours for this user
+    const twentyFourHoursAgo = new Date(Date.now() - 10 * 60 * 60 * 1000);
     const recentClicks = await Click.find({
       userId,
       clickedAt: { $gte: twentyFourHoursAgo },
@@ -18,8 +15,6 @@ export const handleButtonClick = async (req, res) => {
         .status(400)
         .json({ msg: "You can only book 3 appointments within 24 hours." });
     }
-
-    // Save the new click if the limit is not reached
     const newClick = new Click({ userId });
     await newClick.save();
 

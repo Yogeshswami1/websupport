@@ -74,6 +74,7 @@ export default function BookAppointment() {
 
   const [selectedPlatform, setSelectedPlatform] = useState({});
   const [appointments, setAppointments] = useState([]);
+  console.log(appointments);
 
   const getPlatform = async () => {
     try {
@@ -150,7 +151,7 @@ export default function BookAppointment() {
   const getAppointments = async () => {
     try {
       const response = await axios.get(
-        `${apiUrl}/api/support/getappointments`,
+        `${apiUrl}/api/support/getallappointments`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -159,7 +160,6 @@ export default function BookAppointment() {
       );
       console.log("API Response:", response.data);
       if (Array.isArray(response.data)) {
-        // Sort the appointments by date in descending order
         const sortedAppointments = response.data.sort(
           (a, b) => new Date(b.date) - new Date(a.date)
         );
@@ -175,6 +175,13 @@ export default function BookAppointment() {
   useEffect(() => {
     getAppointments();
     getPlatform();
+    const savedEmail = localStorage.getItem("email");
+    if (savedEmail) {
+      setFormData((prevData) => ({
+        ...prevData,
+        email: savedEmail,
+      }));
+    }
   }, []);
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -354,11 +361,10 @@ export default function BookAppointment() {
       getAppointments(); // Update the appointments list
     } catch (error) {
       console.error("Error booking appointment", error);
-      openNotificationWithIcon(
-        "error",
-        "Failed",
-        "Your appointment couldn't be booked at this time, please try again."
-      );
+      const errorMessage =
+        error.response?.data?.message ||
+        "Your appointment couldn't be booked at this time, please try again.";
+      openNotificationWithIcon("error", "Failed", errorMessage);
     }
   };
 
@@ -373,7 +379,7 @@ export default function BookAppointment() {
           >
             <Form
               initialValues={{
-                email: localStorage.getItem("email") || "", // Fetch email from localStorage
+                email: localStorage.getItem("email") || "",
               }}
               form={form}
               layout="vertical"
@@ -417,7 +423,10 @@ export default function BookAppointment() {
                       type="email"
                       name="email"
                       onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
+                        setFormData({
+                          ...formData,
+                          email: localStorage.getItem("email"),
+                        })
                       }
                     />
                   </Form.Item>
@@ -622,30 +631,43 @@ export default function BookAppointment() {
                     >
                       {timeSlots
                         ?.filter((slot) => {
-                          if (!formData.date) return true; // If no date is selected, show all times
+                          if (!formData.date || !formData.manager) return true; // If no date or manager is selected, show all times
 
                           const selectedDate = formData.date.startOf("day");
                           const today = dayjs().startOf("day");
                           const tomorrow = dayjs().add(1, "day").startOf("day");
 
+                          // Convert the slot to a dayjs time for comparison
                           let [hour, minute] = slot.split(":");
                           let slotTime = dayjs()
                             .set("hour", hour)
                             .set("minute", minute);
 
+                          // Hide past time slots for today's date
                           if (selectedDate.isSame(today)) {
-                            // Hide past time slots for today's date
                             return slotTime.isAfter(dayjs());
-                          } else if (selectedDate.isSame(tomorrow)) {
-                            // Show all time slots for tomorrow
-                            return true;
-                          } else {
-                            // Show all times for future dates
-                            return true;
                           }
+
+                          // Show all time slots for tomorrow or future dates
+                          return true;
                         })
                         .map((slot) => (
-                          <Radio.Button key={slot} value={slot}>
+                          <Radio.Button
+                            key={slot}
+                            value={slot}
+                            disabled={
+                              // Disable if already booked
+                              appointments.some(
+                                (appointment) =>
+                                  dayjs(appointment.date).isSame(
+                                    formData.date,
+                                    "day"
+                                  ) &&
+                                  appointment.manager === formData.manager &&
+                                  appointment.time === slot
+                              )
+                            }
+                          >
                             {slot}
                           </Radio.Button>
                         ))}
