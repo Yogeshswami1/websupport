@@ -18,7 +18,7 @@
 // app.use(bodyParser.json());
 
 // app.use("/test", middleware, (req, res) => {
-//   console.log(req.user.name);
+//   
 // });
 // app.use("/api/managers", managerRoutes);
 // app.use("/api/users", userRoutes);
@@ -41,14 +41,14 @@
 //   .connect(process.env.MONGO_URI)
 
 //   .then(() => {
-//     console.log("DB connected successfully");
+//     
 
 //     app.listen(PORT, () => {
-//       console.log(`Server running on port ${PORT}`);
+//       
 //     });
 //   })
 //   .catch((error) => {
-//     console.log("Error connecting to MongoDB:", error.message);
+//     
 //   });
 
 import express from "express";
@@ -69,9 +69,9 @@ const app = express();
 
 // Define CORS options
 const corsOptions = {
-  origin: "http://localhost:3000", // specify allowed origin (replace with actual URL)
+  // origin: "http://localhost:3000", // specify allowed origin (replace with actual URL)
 
-  // origin: 'https://websupport.saumiccraft.com', // specify allowed origin (replace with actual URL)
+  origin: 'https://websupport.saumiccraft.com', // specify allowed origin (replace with actual URL)
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // specify allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // specify allowed headers
   credentials: true, // allow credentials
@@ -82,7 +82,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 app.use("/test", middleware, (req, res) => {
-  console.log(req.user.name);
+  
 });
 app.use("/api/managers", managerRoutes);
 app.use("/api/users", userRoutes);
@@ -106,12 +106,12 @@ app.use("/api/support", supportRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("DB connected successfully");
+    
 
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      
     });
   })
   .catch((error) => {
-    console.log("Error connecting to MongoDB:", error.message);
+    
   });

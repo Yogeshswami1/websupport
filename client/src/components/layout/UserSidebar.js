@@ -14,6 +14,7 @@ function UserSidebar({ color }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loggedout, setLoggedout] = useState(false);
   const [platforms, setPlatforms] = useState([]);
+  console.log(platforms);
   const [selectedPlatform, setSelectedPlatform] = useState({});
   const [form] = Form.useForm();
 
@@ -24,14 +25,11 @@ function UserSidebar({ color }) {
 
   const getPlatform = async () => {
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/support/get-platform`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+      const response = await axios.get(`${apiUrl}/api/support/get-platform`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
       setPlatforms(response.data);
     } catch (err) {
       console.log("Error fetching platforms:", err);
@@ -105,13 +103,9 @@ function UserSidebar({ color }) {
       assignee: values.manager,
     };
     axios
-      .post(
-        `${apiUrl}/api/support/newticket`,
-        formattedValues,
-        {
-          headers: { Authorization: localStorage.getItem("token") },
-        }
-      )
+      .post(`${apiUrl}/api/support/newticket`, formattedValues, {
+        headers: { Authorization: localStorage.getItem("token") },
+      })
       .then((response) => {
         console.log(response.data);
         setIsModalVisible(false);

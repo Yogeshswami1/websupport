@@ -54,6 +54,9 @@ const SupportAdminMenu = () => {
   const handleGetManagerClick = () => {
     history.push("/allmanagers");
   };
+  const handleAllClientClick = () => {
+    history.push("/all-clients");
+  };
 
   const handleLogoutClick = () => {
     localStorage.removeItem("name");
@@ -311,6 +314,27 @@ const SupportAdminMenu = () => {
         onClick={handleGetManagerClick}
       >
         All Managers
+      </Button>
+      <Button
+        variant="contained"
+        startIcon={<PersonIcon />}
+        sx={{
+          mb: 2,
+          height: "50px",
+          width: "200px",
+          backgroundColor: "white",
+          color: "black",
+          fontWeight: "bold",
+          borderRadius: "30px",
+          fontSize: "medium",
+          boxShadow: 5,
+          "&:hover": {
+            backgroundColor: "white",
+          },
+        }}
+        onClick={handleAllClientClick}
+      >
+        All Clients
       </Button>
 
       <Button

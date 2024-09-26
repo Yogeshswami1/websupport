@@ -9,7 +9,7 @@ export const assignPlatform = async (req, res) => {
     const plat = platform.platform;
     manager.platform = plat;
     manager.save();
-    console.log(name);
+    // console.log(name);
     platform.managers.push({ name });
     await platform.save();
     res

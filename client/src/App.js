@@ -44,6 +44,7 @@ import SupportAdminTicketDetails from "./pages/SupportAdminTicketDetails";
 import SupportAdminOpenTickets from "./pages/SupportAdminOpenTickets";
 import SupportManagerAppointmentDetails from "./pages/SupportManagerAppointmentDetails";
 import SupportManagerDetails from "./pages/SupportManageDetails";
+import SupportAllClients from "./pages/SupportAllClients";
 function App() {
   const history = useHistory();
   const token = localStorage.getItem("token");
@@ -151,6 +152,11 @@ function App() {
             exact
             path="/allmanagers"
             component={SupportAllmanager}
+          ></AdminPrivateRoute>
+          <AdminPrivateRoute
+            exact
+            path="/all-clients"
+            component={SupportAllClients}
           ></AdminPrivateRoute>
 
           <Main>

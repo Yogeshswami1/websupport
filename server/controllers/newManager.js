@@ -1,11 +1,17 @@
 import createManager from "../models/createManagerModel.js"; // Assuming createManager is a Mongoose model
 import bcrypt from "bcrypt";
+import Platform from "../models/platform.js";
 
 export const newManager = async (req, res) => {
   try {
     const { name, email, platform, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
+
+    const plat = await Platform.findOne({ platform });
+    console.log(plat);
+    plat.managers.push({ name });
+    await plat.save();
 
     const manager = new createManager({
       name,

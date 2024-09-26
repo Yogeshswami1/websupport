@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import { Card, Modal, Select, notification, Input, Form } from "antd";
 import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
 import { Button } from "@mui/material";
+
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
-
-
 const { Option } = Select;
 
 const SupportManagerDetails = () => {
   const { id } = useParams();
+  const history = useHistory(); // Use history to navigate after deletion
   const [manager, setManager] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,18 +89,14 @@ const SupportManagerDetails = () => {
         }
       );
 
-      console.log("Platform assigned successfully:", response.data);
-
       openNotificationWithIcon(
         "success",
         "Success",
         "Platform assigned successfully."
       );
-
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error assigning platform:", error);
-
       openNotificationWithIcon(
         "error",
         "Error",
@@ -117,12 +113,10 @@ const SupportManagerDetails = () => {
     setSelectedPlatform(value);
   };
 
-  // Function to show the edit modal
   const showEditModal = () => {
     setIsEditModalOpen(true);
   };
 
-  // Function to handle form field changes in the edit modal
   const handleEditFormChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prevForm) => ({
@@ -131,7 +125,6 @@ const SupportManagerDetails = () => {
     }));
   };
 
-  // Function to handle submitting the updated manager details
   const handleEditSubmit = async () => {
     try {
       const response = await axios.put(
@@ -151,12 +144,10 @@ const SupportManagerDetails = () => {
       );
 
       setIsEditModalOpen(false);
-
       // Update manager state with new details
       setManager(response.data);
     } catch (error) {
       console.error("Error updating manager details:", error);
-
       openNotificationWithIcon(
         "error",
         "Error",
@@ -167,6 +158,47 @@ const SupportManagerDetails = () => {
 
   const handleEditCancel = () => {
     setIsEditModalOpen(false);
+  };
+
+  // Handle Delete Function
+  const handleDelete = async () => {
+    try {
+      // Confirm with the user before deleting
+      Modal.confirm({
+        title: "Are you sure you want to delete this manager?",
+        content: "This action cannot be undone.",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: async () => {
+          try {
+            await axios.delete(`${apiUrl}/api/support/delete-manager/${id}`, {
+              headers: {
+                Authorization: localStorage.getItem("token"),
+              },
+            });
+
+            openNotificationWithIcon(
+              "success",
+              "Deleted",
+              "Manager deleted successfully."
+            );
+
+            // Redirect to the manager listing page or home after deletion
+            history.push("/allmanagers");
+          } catch (error) {
+            console.error("Error deleting manager:", error);
+            openNotificationWithIcon(
+              "error",
+              "Error",
+              "There was an error deleting the manager. Please try again."
+            );
+          }
+        },
+      });
+    } catch (error) {
+      console.error("Error initiating delete:", error);
+    }
   };
 
   return (
@@ -200,9 +232,16 @@ const SupportManagerDetails = () => {
               <Button
                 sx={{ marginLeft: "30px" }}
                 variant="contained"
-                onClick={showEditModal} // Show edit modal on click
+                onClick={showEditModal}
               >
                 Edit
+              </Button>
+              <Button
+                sx={{ marginLeft: "30px", backgroundColor: "red" }}
+                variant="contained"
+                onClick={handleDelete} // Call delete function here
+              >
+                Delete
               </Button>
             </Card>
           ) : (
