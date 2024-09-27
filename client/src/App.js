@@ -173,6 +173,7 @@ function App() {
             <Route exact path="/services" component={Services} />
 
             <Redirect from="*" to="/support" />
+            {/* <Redirect from="/" to="/support" /> */}
           </Main>
         </Switch>
       </Provider>
