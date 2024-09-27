@@ -1,6 +1,21 @@
 {
   "files": {
     "main.css": "/static/css/main.96808ea8.css",
+<<<<<<< HEAD
+    "main.js": "/static/js/main.66996f17.js",
+    "static/media/bg-signup.jpg": "/static/media/bg-signup.bec2ba7098b7ca00f473.jpg",
+    "static/media/info-card-2.jpg": "/static/media/info-card-2.9a5119d163ea1e152800.jpg",
+    "static/media/info-card-3.jpg": "/static/media/info-card-3.e73b3934a3c41fdb920d.jpg",
+    "static/media/team-2.jpg": "/static/media/team-2.e725aef8c892cb21f262.jpg",
+    "static/media/saumicSupport.jpg": "/static/media/saumicSupport.3f15916b9f959020a5f4.jpg",
+    "index.html": "/index.html",
+    "main.96808ea8.css.map": "/static/css/main.96808ea8.css.map",
+    "main.66996f17.js.map": "/static/js/main.66996f17.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.96808ea8.css",
+    "static/js/main.66996f17.js"
+=======
     "main.js": "/static/js/main.52b18b26.js",
     "static/media/bg-signup.jpg": "/static/media/bg-signup.bec2ba7098b7ca00f473.jpg",
     "static/media/info-card-2.jpg": "/static/media/info-card-2.9a5119d163ea1e152800.jpg",
@@ -13,5 +28,6 @@
   "entrypoints": [
     "static/css/main.96808ea8.css",
     "static/js/main.52b18b26.js"
+>>>>>>> aab2336e1e7f4dc6e2d8f97b540611477bee487f
   ]
 }

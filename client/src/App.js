@@ -45,8 +45,10 @@ import SupportAdminOpenTickets from "./pages/SupportAdminOpenTickets";
 import SupportManagerAppointmentDetails from "./pages/SupportManagerAppointmentDetails";
 import SupportManagerDetails from "./pages/SupportManageDetails";
 import SupportAllClients from "./pages/SupportAllClients";
+import { useState } from "react";
 function App() {
   const history = useHistory();
+  
   const token = localStorage.getItem("token");
   return (
     <div className="App">
