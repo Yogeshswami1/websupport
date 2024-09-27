@@ -243,3 +243,22 @@
     width: 100%;
   }
 }
+
+.table-row-hover {
+  background-color: rgb(
+    184,
+    184,
+    184
+  ) !important; /* Highlight background color */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Optional: Add active effect for clicked rows */
+.ant-table-tbody > tr:hover {
+  cursor: pointer; /* Show pointer on hover */
+}
+.ant-table-thead > tr > th {
+  background-color: rgba(36, 33, 33, 0.9);
+  font-weight: bold;
+  color: white;
+}

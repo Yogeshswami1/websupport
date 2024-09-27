@@ -116,7 +116,7 @@ const SupportAdminMenu = () => {
             openNotificationWithIcon(
               "error",
               "Failed",
-              "There is a problem creating a new manager. Please try again."
+              "User already exist. Please try again."
             );
           });
       })

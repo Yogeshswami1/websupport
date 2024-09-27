@@ -11,8 +11,12 @@ export const managerLogin = async (req, res) => {
       console.log("manager not exist");
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const isMatch = await bcrypt.compare(password, manager.password);
-    if (!isMatch) {
+    // const isMatch = await bcrypt.compare(password, manager.password);
+    // if (!isMatch) {
+    //   return res.status(401).json({ message: "Invalid credentials" });
+    // }
+    if (password != manager.password) {
+      console.log("user not exist");
       return res.status(401).json({ message: "Invalid credentials" });
     }
     console.log(manager);

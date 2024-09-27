@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row, Input } from "antd";
+import { Table, Input } from "antd";
 import "./SupportUserDashboard.css";
 import axios from "axios";
 import SupportAdminNav from "../components/layout/SupportAdminNav";
@@ -7,7 +7,6 @@ import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
 import { useHistory } from "react-router-dom";
 
-const { Meta } = Card;
 const { Search } = Input;
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -15,7 +14,7 @@ const SupportAllClients = () => {
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]); // For search
   const [loadingData, setLoadingData] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredRow, setHoveredRow] = useState(null); // Track hovered row
   const [searchTerm, setSearchTerm] = useState(""); // Track the search term
   const history = useHistory();
 
@@ -29,7 +28,7 @@ const SupportAllClients = () => {
       });
       if (Array.isArray(response.data)) {
         setClients(response.data);
-        setFilteredClients(response.data); 
+        setFilteredClients(response.data);
       } else {
         console.error("Error: API response is not an array", response.data);
       }
@@ -44,7 +43,7 @@ const SupportAllClients = () => {
   }, []);
 
   const handleSearch = (value) => {
-    setSearchTerm(value); 
+    setSearchTerm(value);
     if (value === "") {
       setFilteredClients(clients);
     } else {
@@ -59,14 +58,40 @@ const SupportAllClients = () => {
     }
   };
 
-
-  const handleMouseEnter = (id) => {
-    setHoveredCard(id);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredCard(null);
-  };
+  // Define columns for the table
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Platform",
+      dataIndex: "platform",
+      key: "platform",
+    },
+    {
+      title: "Enrollment Number",
+      dataIndex: "enrollmentNumber",
+      key: "enrollmentNumber",
+    },
+    {
+      title: "Password",
+      dataIndex: "password",
+      key: "password",
+    },
+    {
+      title: "Date of Joining",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt) => new Date(createdAt).toLocaleDateString(),
+    },
+  ];
 
   return (
     <>
@@ -81,50 +106,34 @@ const SupportAllClients = () => {
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
             enterButton
-            style={{ marginBottom: "20px",width:"40%" }} 
+            style={{ marginBottom: "20px", width: "40%" }}
           />
 
           {loadingData ? (
             <Loader />
           ) : filteredClients.length > 0 ? (
-            <Row gutter={[16, 16]}>
-              {filteredClients.map((client) => (
-                <Col key={client._id} span={8}>
-                  <Card
-                    style={{
-                      boxShadow:
-                        hoveredCard === client._id
-                          ? "0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19)"
-                          : "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-                      transform:
-                        hoveredCard === client._id ? "scale(1.05)" : "scale(1)",
-                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                    }}
-                    hoverable
-                    onMouseEnter={() => handleMouseEnter(client._id)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <Meta
-                      style={{ textAlign: "center" }}
-                      title={client.name}
-                      description={
-                        <>
-                          <p>Email: {client.email}</p>
-                          <p>Platform: {client.platform}</p>
-                          <p>Enrollment: {client.enrollmentNumber}</p>
-                          <p>Password: {client.password}</p>
-
-                          <p>
-                            Date of Joining:{" "}
-                            {new Date(client.createdAt).toLocaleDateString()}
-                          </p>
-                        </>
-                      }
-                    />
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+            <div style={{ overflowX: "auto" }}>
+              <Table
+                bordered
+                columns={columns}
+                dataSource={filteredClients.map((client) => ({
+                  key: client._id, // Unique key for each row
+                  ...client,
+                }))}
+                pagination={{ pageSize: 10 }}
+                rowClassName={(record) =>
+                  hoveredRow === record._id ? "table-row-hover" : ""
+                }
+                onRow={(record) => ({
+                  onMouseEnter: () => setHoveredRow(record._id), // Set hovered row
+                  onMouseLeave: () => setHoveredRow(null), // Reset hovered row
+                  onClick: () => {
+                    // Handle row click (optional)
+                    console.log("Row clicked", record);
+                  },
+                })}
+              />
+            </div>
           ) : (
             <div
               style={{

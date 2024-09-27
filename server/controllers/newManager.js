@@ -5,8 +5,6 @@ import Platform from "../models/platform.js";
 export const newManager = async (req, res) => {
   try {
     const { name, email, platform, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
 
     const plat = await Platform.findOne({ platform });
     console.log(plat);
@@ -17,7 +15,7 @@ export const newManager = async (req, res) => {
       name,
       email,
       platform,
-      password: hashedPassword,
+      password,
     });
 
     const savedManager = await manager.save();
