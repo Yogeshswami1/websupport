@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, Input } from "antd";
-import "./SupportUserDashboard.css";
+import { Table, Input, Button, Modal, Form, message, notification } from "antd";
 import axios from "axios";
 import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
 import { useHistory } from "react-router-dom";
+import "./SupportUserDashboard.css";
 
 const { Search } = Input;
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
@@ -16,7 +16,17 @@ const SupportAllClients = () => {
   const [loadingData, setLoadingData] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(null); // Track hovered row
   const [searchTerm, setSearchTerm] = useState(""); // Track the search term
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingClient, setEditingClient] = useState(null); // Track client to edit
   const history = useHistory();
+  const [form] = Form.useForm();
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message,
+      description,
+      style: { marginTop: 100 },
+    });
+  };
 
   const getClients = async () => {
     setLoadingData(true);
@@ -58,6 +68,66 @@ const SupportAllClients = () => {
     }
   };
 
+  // Handle delete client
+  const deleteClient = async (clientId) => {
+    try {
+      await axios.delete(`${apiUrl}/api/support/deleteclient/${clientId}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      openNotificationWithIcon(
+        "success",
+        "Success",
+        "Client deleted successfully."
+      );
+      getClients(); // Refresh the clients list after deletion
+    } catch (error) {
+      openNotificationWithIcon(
+        "error",
+        "Error",
+        "There is an issue in deleting the client"
+      );
+      console.error("Error deleting client:", error);
+    }
+  };
+
+  // Handle edit client
+  const handleEdit = (client) => {
+    setEditingClient(client);
+    form.setFieldsValue(client); // Pre-fill form with client data
+    setIsModalVisible(true);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const updatedClient = await form.validateFields();
+      await axios.put(
+        `${apiUrl}/api/support/updateclient/${editingClient._id}`,
+        updatedClient,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      openNotificationWithIcon(
+        "success",
+        "Success",
+        "Client updated successfully."
+      );
+      setIsModalVisible(false);
+      getClients(); // Refresh the clients list after updating
+    } catch (error) {
+      console.error("Error updating client:", error);
+      openNotificationWithIcon(
+        "error",
+        "Error",
+        "There is an issue in updating client."
+      );
+    }
+  };
+
   // Define columns for the table
   const columns = [
     {
@@ -90,6 +160,24 @@ const SupportAllClients = () => {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (createdAt) => new Date(createdAt).toLocaleDateString(),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <>
+          <Button
+            type="primary"
+            onClick={() => handleEdit(record)}
+            style={{ marginRight: 8 }}
+          >
+            Edit
+          </Button>
+          <Button type="danger" onClick={() => deleteClient(record._id)}>
+            Delete
+          </Button>
+        </>
+      ),
     },
   ];
 
@@ -128,7 +216,6 @@ const SupportAllClients = () => {
                   onMouseEnter: () => setHoveredRow(record._id), // Set hovered row
                   onMouseLeave: () => setHoveredRow(null), // Reset hovered row
                   onClick: () => {
-                    // Handle row click (optional)
                     console.log("Row clicked", record);
                   },
                 })}
@@ -148,6 +235,30 @@ const SupportAllClients = () => {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      <Modal
+        title="Edit Client"
+        visible={isModalVisible}
+        onOk={handleUpdate}
+        onCancel={() => setIsModalVisible(false)}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };

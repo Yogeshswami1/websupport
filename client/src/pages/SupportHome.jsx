@@ -13,6 +13,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SupportHome = () => {
+  const role = localStorage.getItem("role");
   const dispatch = useDispatch();
   const [holidays, setHolidays] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -30,6 +31,15 @@ const SupportHome = () => {
 
   // Fetch holidays from backend
   useEffect(() => {
+    if (role === "user") {
+      history.push("/supportuserdashboard");
+    }
+    if (role === "manager") {
+      history.push("/supportmanagerdashboard");
+    }
+    if (role === "admin") {
+      history.push("/supportadmindashboard");
+    }
     const fetchHolidays = async () => {
       try {
         const response = await axios.get(`${apiUrl}/api/support/holiday`);

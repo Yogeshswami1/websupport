@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SupportMngrNavbar from "../components/layout/SupportMngrNavbar.jsx";
 import "./SupportHome.css";
 import SupportFooter from "../components/layout/SupportFooter.jsx";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
 
 const SupportManager = () => {
+  const history = useHistory();
+  const role = localStorage.getItem("role");
+  useEffect(() => {
+    if (role === "manager") {
+      history.push("/supportmanagerdashboard");
+    }
+  });
   return (
     <>
       <SupportMngrNavbar />

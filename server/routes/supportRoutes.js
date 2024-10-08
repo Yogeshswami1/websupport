@@ -40,6 +40,8 @@ import { assignPlatform } from "../controllers/assignPlatform.js";
 import { updateManager } from "../controllers/updateManager.js";
 import { getAllClients } from "../controllers/getAllClients.js";
 import { deleteManager } from "../controllers/deleteManager.js";
+import { updateClient } from "../controllers/updateClient.js";
+import { deleteClient } from "../controllers/deleteClient.js";
 
 const router = express.Router();
 
@@ -92,11 +94,13 @@ router.post("/reviewappointment/:id", review);
 router.put("/addmanagercomment/:id", managerReview);
 router.put("/addcommentandclose/:id", addCommentAndClose);
 router.put("/addComment/:id", addComment);
+router.put("/updateclient/:editingClient", updateClient);
+router.delete("/deleteclient/:clientId",deleteClient);
 
 router.get("/appointmentbyid/:id", getAppointmentsDetails);
 router.put("/update-manager/:id", updateManager);
 router.get("/getallclients", getAllClients);
-router.delete("/delete-manager/:id",deleteManager);
+router.delete("/delete-manager/:id", deleteManager);
 
 export default router;
 

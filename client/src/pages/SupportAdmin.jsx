@@ -1,10 +1,17 @@
-import React from "react";
-import SupportMngrNavbar from "../components/layout/SupportMngrNavbar.jsx";
+import React, { useEffect } from "react";
 import "./SupportHome.css";
 import SupportFooter from "../components/layout/SupportFooter.jsx";
 import SupportAdminNav from "../components/layout/SupportAdminNav.jsx";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
 
 const SupportAdmin = () => {
+  const history = useHistory();
+  const role = localStorage.getItem("role");
+  useEffect(() => {
+    if (role === "admin") {
+      history.push("/supportadmindashboard");
+    }
+  });
   return (
     <>
       <SupportAdminNav />
