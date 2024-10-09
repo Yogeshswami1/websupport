@@ -11,7 +11,7 @@ import axios from "axios";
 import SupportAdminNav from "../components/layout/SupportAdminNav";
 import SupportAdminMenu from "../components/layout/SupportAdminMenu";
 import Loader from "../components/layout/Loader";
-import { notification, Input, Form, Radio } from "antd";
+import { notification, Form, Input } from "antd";
 import moment from "moment";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
@@ -26,8 +26,6 @@ const SupportAdminAppointment = () => {
   const [filterId, setFilterId] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
 
-  console.log("all appointments", appointments);
-
   const openNotificationWithIcon = (type, message, description) => {
     notification[type]({
       message,
@@ -37,7 +35,6 @@ const SupportAdminAppointment = () => {
   };
 
   const handleButtonClick = async (id) => {
-    console.log("button data", id);
     try {
       await axios.put(`${apiUrl}/api/support/updateappointmentbyid/${id}`, {
         headers: {
@@ -51,7 +48,6 @@ const SupportAdminAppointment = () => {
       );
       history.push("/supportadminappointments");
     } catch (error) {
-      console.error("Error updating appointment:", error);
       openNotificationWithIcon(
         "error",
         "Login Fail",
@@ -88,7 +84,6 @@ const SupportAdminAppointment = () => {
           },
         }
       );
-      console.log("API Response:", response.data);
       if (Array.isArray(response.data)) {
         const sortedAppointments = response.data.sort(
           (a, b) => new Date(b.date) - new Date(a.date)
@@ -139,12 +134,16 @@ const SupportAdminAppointment = () => {
   };
 
   const handleRowClick = (id) => {
-    console.log(id);
     history.push(`/supportappointmentdetails/${id}`);
   };
 
   const handleStatusFilterOptionChange = (event) => {
     setStatusFilterOption(event.target.value);
+  };
+
+  const handleDateFilterOptionChange = (event) => {
+    setDateFilterOption(event.target.value);
+    setSelectedDate(""); // Reset custom date if preset is selected
   };
 
   const filterAppointments = (
@@ -162,9 +161,22 @@ const SupportAdminAppointment = () => {
       );
     } else {
       switch (dateFilterOption) {
-        case "day":
+        case "today":
           filteredAppointments = filteredAppointments.filter((appointment) =>
             moment(appointment.date).isSame(today, "day")
+          );
+          break;
+        case "yesterday":
+          filteredAppointments = filteredAppointments.filter((appointment) =>
+            moment(appointment.date).isSame(
+              today.clone().subtract(1, "day"),
+              "day"
+            )
+          );
+          break;
+        case "tomorrow":
+          filteredAppointments = filteredAppointments.filter((appointment) =>
+            moment(appointment.date).isSame(today.clone().add(1, "day"), "day")
           );
           break;
         case "week":
@@ -261,31 +273,42 @@ const SupportAdminAppointment = () => {
                 >
                   <MenuItem value="all">All</MenuItem>
                   <MenuItem value="closed">Resolved</MenuItem>
-
                   <MenuItem value="pending">Unresolved</MenuItem>
                 </Select>
               </FormControl>
             </Form.Item>
-            {/* <Form.Item className="custom-form-item">
-              <Radio.Group
-                value={dateFilterOption}
-                onChange={handleFilterOptionChange}
-              >
-                <Radio.Button value="all">All</Radio.Button>
-                <Radio.Button value="day">Today</Radio.Button>
-                <Radio.Button value="week">This Week</Radio.Button>
-                <Radio.Button value="month">This Month</Radio.Button>
-              </Radio.Group>
-            </Form.Item> */}
+
             <Form.Item label="Filter by Date" className="custom-form-item">
-              <Input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-              />
+              <FormControl variant="outlined" size="small">
+                <Select
+                  value={dateFilterOption}
+                  onChange={handleDateFilterOptionChange}
+                  label="Date Filter"
+                >
+                  <MenuItem value="all">All</MenuItem>
+                  <MenuItem value="today">Today</MenuItem>
+                  <MenuItem value="yesterday">Yesterday</MenuItem>
+                  <MenuItem value="tomorrow">Tomorrow</MenuItem>
+                  <MenuItem value="week">This Week</MenuItem>
+                  <MenuItem value="month">This Month</MenuItem>
+                  <MenuItem value="custom">Custom Date</MenuItem>
+                </Select>
+              </FormControl>
             </Form.Item>
+
+            {dateFilterOption === "custom" && (
+              <Form.Item className="custom-form-item">
+                <Input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  size="small"
+                />
+              </Form.Item>
+            )}
           </Form>
         </div>
+
         <div className="scontent">
           {loadingData ? (
             <Loader />
