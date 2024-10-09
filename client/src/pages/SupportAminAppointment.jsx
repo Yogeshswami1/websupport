@@ -146,15 +146,26 @@ const SupportAdminAppointment = () => {
     setSelectedDate(""); // Reset custom date if preset is selected
   };
 
+  // Updated filterAppointments function
   const filterAppointments = (
     appointments,
     dateFilterOption,
     statusFilterOption,
-    selectedDate
+    selectedDate,
+    filterId // Add filterId as a parameter
   ) => {
     const today = moment().startOf("day");
     let filteredAppointments = appointments;
 
+    // 1. Filter by manager if filterId is set
+    if (filterId) {
+      filteredAppointments = filteredAppointments.filter(
+        (appointment) =>
+          appointment.manager && appointment.manager.includes(filterId)
+      );
+    }
+
+    // 2. Filter by date
     if (selectedDate) {
       filteredAppointments = filteredAppointments.filter((appointment) =>
         moment(appointment.date).isSame(moment(selectedDate), "day")
@@ -194,6 +205,7 @@ const SupportAdminAppointment = () => {
       }
     }
 
+    // 3. Filter by status
     switch (statusFilterOption) {
       case "pending":
         filteredAppointments = filteredAppointments.filter(
@@ -212,17 +224,13 @@ const SupportAdminAppointment = () => {
     return filteredAppointments;
   };
 
-  const filteredAppointments = filterId
-    ? appointments.filter(
-        (appointment) =>
-          appointment.manager && appointment.manager.includes(filterId)
-      )
-    : filterAppointments(
-        appointments,
-        dateFilterOption,
-        statusFilterOption,
-        selectedDate
-      );
+  const filteredAppointments = filterAppointments(
+    appointments,
+    dateFilterOption,
+    statusFilterOption,
+    selectedDate,
+    filterId // Pass filterId here
+  );
 
   return (
     <>
@@ -317,7 +325,7 @@ const SupportAdminAppointment = () => {
               <thead>
                 <tr>
                   <th>Id</th>
-                  <th>Name</th>
+                  <th>Enrollment</th>
                   <th>Manager</th>
                   <th>Date</th>
                   <th>Time</th>
@@ -336,7 +344,7 @@ const SupportAdminAppointment = () => {
                     onClick={() => handleRowClick(appointment._id)}
                   >
                     <td>AP{appointment.appointmentId}</td>
-                    <td>{appointment.name}</td>
+                    <td>{appointment.enrollment}</td>
                     <td>{appointment.manager}</td>
                     <td>{formatDate(appointment.date)}</td>
                     <td>{appointment.time}</td>
